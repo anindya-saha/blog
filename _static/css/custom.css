@@ -12,24 +12,26 @@
 		max-width: 1500px
 	}
 }
-/* Pandas tables. Pulled from the Jupyter / nbsphinx CSS */
-div.cell_output table {
-    border: none;
-    border-collapse: collapse;
-    border-spacing: 0;
-    color: black;
-    font-size: 0.75em;
-    table-layout: fixed;
-  }
 
 .dataframe {
-    border: none;
-    border-collapse: collapse;
-    border-spacing: 0;
-    color: black;
-    font-size: 0.75em;
-    table-layout: fixed;
-  }
+    font-size: 0.75em; 
+    border-collapse: collapse; 
+    border: 1px solid silver;
+
+}
+
+.dataframe td, th {
+    padding: 5px;
+}
+
+.dataframe tr:nth-child(even) {
+    background: #E0E0E0;
+}
+
+.dataframe tr:hover {
+    background: silver;
+    cursor: pointer;
+}
 
 h1 {
 	font-size: 2.5em;
