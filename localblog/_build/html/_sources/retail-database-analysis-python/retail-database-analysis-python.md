@@ -1,12 +1,13 @@
 # Advanced Data Analysis of a Retail Store using Apache Spark (PySpark)
 
 In this notebook we will go through Spark SQL as well as Spark DF API based transformations and actions ranging from simple to quite complex. I use this as a reference in my day to day job. These tables come from the Cloudera Installation. A fictitious retail house with the following tables: customers, departments, categories, products, orders and order_items. 
- 
 
-`
-@author: Anindya Saha  
+```
+@author: Anindya Saha
+```
+```
 @email: mail.anindya@gmail.com
-`
+```
 
 ## Table of contents
 
@@ -102,9 +103,10 @@ np.random.set_state=rnd_seed
 ```
 
 ## 1. Understanding the Data Set:
-![](assets/cloudera-retail-db.png)
+![](cloudera-retail-db.png)
 Picture Source: https://www.cloudera.com/developers/get-started-with-hadoop-tutorial/exercise-1.html
-```
+
+```bash
 mysql> describe customers;
 +-------------------+--------------+------+-----+---------+----------------+
 | Field             | Type         | Null | Key | Default | Extra          |
@@ -172,8 +174,7 @@ mysql> describe order_items;
 +--------------------------+------------+------+-----+---------+----------------+
 ```
 
-
-[Back to Top](#Table-of-contents)
+[Back to Top](##Table-of-contents)
 
 ## 2. Creating the Spark Session:
 
@@ -206,12 +207,10 @@ spark
 
 
 
-    <div>
-        <p><b>SparkSession - in-memory</b></p>
-
+```html
 <div>
     <p><b>SparkContext</b></p>
-
+    <p><b>SparkSession - in-memory</b></p>
     <p><a href="http://ip-172-30-2-158.ec2.internal:4040">Spark UI</a></p>
 
     <dl>
@@ -223,38 +222,7 @@ spark
         <dd><code>retail-database-analysis-python</code></dd>
     </dl>
 </div>
-
-    </div>
-
-
-
-
-
-```python
-sc = spark.sparkContext
-sc
 ```
-
-
-
-
-
-<div>
-    <p><b>SparkContext</b></p>
-
-    <p><a href="http://ip-172-30-2-158.ec2.internal:4040">Spark UI</a></p>
-
-    <dl>
-      <dt>Version</dt>
-        <dd><code>v2.4.0</code></dd>
-      <dt>Master</dt>
-        <dd><code>local[*]</code></dd>
-      <dt>AppName</dt>
-        <dd><code>retail-database-analysis-python</code></dd>
-    </dl>
-</div>
-
-
 
 
 
@@ -369,46 +337,6 @@ order_items_df.cache()
 
 
 
-
-    DataFrame[customer_id: int, customer_fname: string, customer_lname: string, customer_email: string, customer_password: string, customer_street: string, customer_city: string, customer_state: string, customer_zipcode: string]
-
-
-
-
-
-
-    DataFrame[department_id: int, department_name: string]
-
-
-
-
-
-
-    DataFrame[category_id: int, category_department_id: int, category_name: string]
-
-
-
-
-
-
-    DataFrame[product_id: int, product_category_id: int, product_name: string, product_description: string, product_price: float, product_image: string]
-
-
-
-
-
-
-    DataFrame[order_id: int, order_date: string, order_customer_id: int, order_status: string]
-
-
-
-
-
-
-    DataFrame[order_item_id: int, order_item_order_id: int, order_item_product_id: int, order_item_quantity: int, order_item_subtotal: float, order_item_product_price: float]
-
-
-
 [Back to Top](#Table-of-contents)
 
 ### 3.1. Register all the DataFrames as Temporary Views:
@@ -434,8 +362,9 @@ customers_df.select([col(choice) for choice in np.random.choice(customers_df.col
     |10 Crystal River ...|            PR|          5|        Robert|           00725|
     +--------------------+--------------+-----------+--------------+----------------+
     only showing top 5 rows
-    
-    
+
+
+​    
 
 
 ```python
@@ -457,8 +386,9 @@ departments_df.show(5)
     |            6|       Outdoors|
     +-------------+---------------+
     only showing top 5 rows
-    
-    
+
+
+​    
 
 
 ```python
@@ -480,8 +410,9 @@ categories_df.show(5)
     |          5|                     2|           Lacrosse|
     +-----------+----------------------+-------------------+
     only showing top 5 rows
-    
-    
+
+
+​    
 
 
 ```python
@@ -503,8 +434,9 @@ products_df.show(5)
     |         5|                  2|Riddell Youth Rev...|               null|       199.99|http://images.acm...|
     +----------+-------------------+--------------------+-------------------+-------------+--------------------+
     only showing top 5 rows
-    
-    
+
+
+​    
 
 
 ```python
@@ -526,8 +458,9 @@ orders_df.show(5)
     |       5|2013-07-25 00:00:...|            11318|       COMPLETE|
     +--------+--------------------+-----------------+---------------+
     only showing top 5 rows
-    
-    
+
+
+​    
 
 
 ```python
@@ -549,8 +482,9 @@ order_items_df.show(5)
     |            5|                  4|                  897|                  2|              49.98|                   24.99|
     +-------------+-------------------+---------------------+-------------------+-------------------+------------------------+
     only showing top 5 rows
-    
-    
+
+
+​    
 
 [Back to Top](#Table-of-contents)
 
@@ -580,8 +514,9 @@ spark.sql("select count(order_id) from orders").show()
     +---------------+
     |          68883|
     +---------------+
-    
-    
+
+
+​    
 
 **DF API:**
 
@@ -619,8 +554,9 @@ spark.sql(strip_margin(
     +-----------------+
     |597.6322996016944|
     +-----------------+
-    
-    
+
+
+​    
 
 **DF API:**
 
@@ -638,8 +574,9 @@ spark.sql(strip_margin(
     +-----------------+
     |597.6322996016944|
     +-----------------+
-    
-    
+
+
+​    
 
 ### 4.3 Get Average Revenue Per Day:
 
@@ -683,8 +620,9 @@ spark.sql(strip_margin(
     |2013-08-13 00:00:00.0|604.1594044945457|
     +---------------------+-----------------+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 **DF API:**
 
@@ -736,8 +674,9 @@ avg_rev_per_day.show(truncate=False)
     |2013-08-13 00:00:00.0|604.1594044945457|
     +---------------------+-----------------+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 ### 4.3.1 Get Average Revenue Per Month:
 
@@ -782,8 +721,9 @@ avg_rev_per_month.show(truncate=False)
     |11   |597.1851199455583|
     |12   |596.4810251733772|
     +-----+-----------------+
-    
-    
+
+
+​    
 
 
 ```python
@@ -846,8 +786,9 @@ spark.sql(strip_margin(
     |2014      |6          |2703463.491306305 |
     |2014      |7          |2238496.5645008087|
     +----------+-----------+------------------+
-    
-    
+
+
+​    
 
 **DF API:**
 
@@ -891,8 +832,9 @@ tot_rev_per_month_per_year.show()
     |      2014|          6| 2703463.491306305|
     |      2014|          7|2238496.5645008087|
     +----------+-----------+------------------+
-    
-    
+
+
+​    
 
 
 ```python
@@ -956,8 +898,9 @@ spark.sql(strip_margin(
     |      2014|          6| 2703463.49|
     |      2014|          7| 2238496.56|
     +----------+-----------+-----------+
-    
-    
+
+
+​    
 
 Simple enough, but what if we also want to include the total revenue irrespective of the `order_month` and the `order_year` in the same result? With a conventional group-by statement, this would be impossible. But it's simple with `grouping sets`: we simply specify that we would like to aggregate at that level, as well in our grouping set. This is, effectively, the union of several different groupings together.
 
@@ -990,8 +933,9 @@ spark.sql(strip_margin(
     |      2014|          6| 2703463.49|
     |      2014|          7| 2238496.56|
     +----------+-----------+-----------+
-    
-    
+
+
+​    
 
 Here, include the following groupings in the same result:
 - total revenue irrespective of the `order_year` and `order_month`
@@ -1042,8 +986,9 @@ spark.sql(strip_margin(
     |      2014|          6| 2703463.49|
     |      2014|          7| 2238496.56|
     +----------+-----------+-----------+
-    
-    
+
+
+​    
 
 **DF API:**
 The GROUPING SETS operator is only available in SQL. To perform the same in DataFrames, we need to use the `rollup` and `cube` operators - which allow us to get the same results.
@@ -1095,8 +1040,9 @@ rev_df.show(truncate=False)
     |2013      |7          |50.0               |
     +----------+-----------+-------------------+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 
 ```python
@@ -1147,8 +1093,9 @@ A `rollup` is a multidimensional aggregation that performs a variety of group-by
     |      2014|          6| 2703463.49|
     |      2014|          7| 2238496.56|
     +----------+-----------+-----------+
-    
-    
+
+
+​    
 
 **Cube:**
 In `rollup` above we did not get the aggregation
@@ -1202,8 +1149,9 @@ Using `cube` helps to answer all the of the following in one aggregate DataFrame
     |      2014|          6|   2703463.491306305|
     |      2014|          7|  2238496.5645008087|
     +----------+-----------+--------------------+
-    
-    
+
+
+​    
 
 [Back to Top](#Table-of-contents)
 
@@ -1246,8 +1194,9 @@ spark.sql(strip_margin(
     |Outdoors       |2013      |420317.9507675171 |
     |Outdoors       |2014      |532437.6709976196 |
     +---------------+----------+------------------+
-    
-    
+
+
+​    
 
 **DF API:**
 
@@ -1294,8 +1243,9 @@ df.show()
     |       Outdoors|      2013| 420317.9507675171|
     |       Outdoors|      2014| 532437.6709976196|
     +---------------+----------+------------------+
-    
-    
+
+
+​    
 
 
 ```python
@@ -1320,7 +1270,7 @@ print(pdf)
     Footwear         1.711493e+06  2.122340e+06
     Golf             1.967397e+06  2.440585e+06
     Outdoors         4.203180e+05  5.324377e+05
-    
+
 
 
 ```python
@@ -1363,8 +1313,9 @@ spark.sql(strip_margin(
     +----------+-------------------+-------------------+-------------------+-------------+--------------------+
     |       208|                 10|SOLE E35 Elliptical|               null|      1999.99|http://images.acm...|
     +----------+-------------------+-------------------+-------------------+-------------+--------------------+
-    
-    
+
+
+​    
 
 **SQL Using rank() Window Function:**
 
@@ -1385,8 +1336,9 @@ spark.sql(strip_margin(
     +----------+-------------------+-------------------+-------------------+-------------+--------------------+----+
     |       208|                 10|SOLE E35 Elliptical|               null|      1999.99|http://images.acm...|   1|
     +----------+-------------------+-------------------+-------------------+-------------+--------------------+----+
-    
-    
+
+
+​    
 
 **DF API:**
 
@@ -1403,8 +1355,9 @@ spark.sql(strip_margin(
     +----------+-------------------+-------------------+-------------------+-------------+--------------------+
     |       208|                 10|SOLE E35 Elliptical|               null|      1999.99|http://images.acm...|
     +----------+-------------------+-------------------+-------------------+-------------+--------------------+
-    
-    
+
+
+​    
 
 **DF API Using Window Function:**
 
@@ -1423,8 +1376,9 @@ products_df.select('*', F.rank().over(windowSpec).alias('rank')).filter(col('ran
     +----------+-------------------+-------------------+-------------------+-------------+--------------------+----+
     |       208|                 10|SOLE E35 Elliptical|               null|      1999.99|http://images.acm...|   1|
     +----------+-------------------+-------------------+-------------------+-------------+--------------------+----+
-    
-    
+
+
+​    
 
 [Back to Top](#Table-of-contents)
 
@@ -1450,8 +1404,9 @@ spark.sql(strip_margin(
     +----------+-------------------+--------------------+-------------------+-------------+--------------------+-----------------+
     |      1004|                 45|Field & Stream Sp...|               null|       399.98|http://images.acm...|6929653.690338135|
     +----------+-------------------+--------------------+-------------------+-------------+--------------------+-----------------+
-    
-    
+
+
+​    
 
 **SQL:**
 
@@ -1487,8 +1442,9 @@ spark.sql(strip_margin(
     |627       |29                 |Under Armour Girls' Toddler Spine Surge Runni|1214896.22     |
     |565       |26                 |adidas Youth Germany Black/Red Away Match Soc|63490.0        |
     +----------+-------------------+---------------------------------------------+---------------+
-    
-    
+
+
+​    
 
 **DF API:**
 
@@ -1513,8 +1469,9 @@ spark.sql(strip_margin(
     +----------+-------------------+--------------------+-----------------+
     |      1004|                 45|Field & Stream Sp...|6929653.690338135|
     +----------+-------------------+--------------------+-----------------+
-    
-    
+
+
+​    
 
 [Back to Top](#Table-of-contents)
 
@@ -1600,8 +1557,9 @@ df.show(truncate=False)
     |2013      |Nov        |Nike Men's Dri-FIT Victory Golf Polo         |278400.0       |5         |
     +----------+-----------+---------------------------------------------+---------------+----------+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 
 ```python
@@ -1688,8 +1646,9 @@ rev_per_month_per_year_per_product.show(5, truncate=False)
     |2014      |Feb        |Titleist Small Wheeled Travel Cover          |249.99         |
     +----------+-----------+---------------------------------------------+---------------+
     only showing top 5 rows
-    
-    
+
+
+​    
 
 
 ```python
@@ -1743,8 +1702,9 @@ top_prod_per_month_per_year_by_rev.show(truncate=False)
     |2013      |Nov        |Nike Men's Dri-FIT Victory Golf Polo         |278400.0       |5         |
     +----------+-----------+---------------------------------------------+---------------+----------+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 
 ```python
@@ -1799,8 +1759,9 @@ spark.sql(strip_margin(
     |       Shop By Sport|      10984|
     |         Electronics|       3156|
     +--------------------+-----------+
-    
-    
+
+
+​    
 
 **DF API:**
 
@@ -1843,8 +1804,9 @@ pop_cat.show()
     |    Camping & Hiking|      13729|
     |         Electronics|       9436|
     +--------------------+-----------+
-    
-    
+
+
+​    
 
 
 ```python
@@ -1938,8 +1900,9 @@ rev_cat_qt_df.show()
     |     Women's Apparel|      2013|           Q3|               50.0|
     +--------------------+----------+-------------+-------------------+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 
 ```python
@@ -1990,8 +1953,9 @@ rev_cat_qt_pivot_df.show()
     |         Electronics|      2013|      null|      null|  68847.75|  97031.17|  165878.92|
     +--------------------+----------+----------+----------+----------+----------+-----------+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 **SQL (post Spark 2.4.0)**  
 **With Spark 2.4.0 SQL equivalent pivot function was introduced**. Now we can achieve the same same with one query instead to DF + SQL combination.
@@ -2042,8 +2006,9 @@ rev_cat_qt_pivot_df.show()
     |         Electronics|      2013|      null|      null|  68847.75|  97031.17|  165878.92|
     +--------------------+----------+----------+----------+----------+----------+-----------+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 **Revalidate above calculation with a specific year='2013' and category='Fishing':**
 
@@ -2070,8 +2035,9 @@ spark.sql(strip_margin(
     |      Fishing|      2013|           Q3| 1248337.61|
     |      Fishing|      2013|           Q4| 1705514.77|
     +-------------+----------+-------------+-----------+
-    
-    
+
+
+​    
 
 There are only two quarters Q3 and Q4 for Fishing in 2013 and the sum of the sales is 1248337.61 + 1705514.77 = 2953852.38
 
@@ -2086,8 +2052,9 @@ rev_cat_qt_pivot_df.filter(col('order_year') == 2013).filter(col('category_name'
     +-------------+----------+----+----+----------+----------+-----------+
     |      Fishing|      2013|null|null|1248337.61|1705514.77| 2953852.38|
     +-------------+----------+----+----+----------+----------+-----------+
-    
-    
+
+
+​    
 
 From the pivot table we can verify that Q1 and Q2 had no sale and the sum of total sales in quarters Q3 and Q4 for Fishing in 2013 2953852.38 Hence, we can verify that our pivot function is working fine.
 
@@ -2115,7 +2082,7 @@ rev_cat_qt_pivot_pdf.head()
     .dataframe thead th {
         text-align: left;
     }
-
+    
     .dataframe tbody tr th {
         vertical-align: top;
     }
@@ -2261,8 +2228,9 @@ spark.sql(strip_margin(
     |        PENDING| 7610|
     |       CANCELED| 1428|
     +---------------+-----+
-    
-    
+
+
+​    
 
 **DF API:**
 
@@ -2297,8 +2265,9 @@ df.show()
     |        PENDING| 7610|
     |       CANCELED| 1428|
     +---------------+-----+
-    
-    
+
+
+​    
 
 
 ```python
@@ -2367,8 +2336,9 @@ spark.sql(strip_margin(
     |2013-09-27 00:00:00.0|PENDING_PAYMENT|56   |
     +---------------------+---------------+-----+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 **DF API:**
 
@@ -2405,8 +2375,9 @@ spark.sql(strip_margin(
     |2013-09-27 00:00:00.0|PENDING_PAYMENT|56   |
     +---------------------+---------------+-----+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 [Back to Top](#Table-of-contents)
 
@@ -2453,8 +2424,9 @@ spark.sql(strip_margin(
     |8488    |2013-09-16 00:00:00.0|9154             |CANCELED    |1079.8900108337402|
     +--------+---------------------+-----------------+------------+------------------+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 **DF API:**
 
@@ -2508,8 +2480,9 @@ cancelled_orders.show(truncate=False)
     |8488    |2013-09-16 00:00:00.0|9154             |CANCELED    |1079.8900108337402|
     +--------+---------------------+-----------------+------------+------------------+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 
 ```python
@@ -2573,8 +2546,9 @@ spark.sql(strip_margin(
     |1         |2                  |Quest Q64 10 FT. x 10 FT. Slant Leg Instant U|59.98        |
     +----------+-------------------+---------------------------------------------+-------------+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 **DF API:**
 
@@ -2611,8 +2585,9 @@ spark.sql(strip_margin(
     |1         |2                  |Quest Q64 10 FT. x 10 FT. Slant Leg Instant U|59.98        |
     +----------+-------------------+---------------------------------------------+-------------+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 [Back to Top](#Table-of-contents)
 
@@ -2655,8 +2630,9 @@ spark.sql(strip_margin(
     |1160      |52                 |Reebok Women's Chicago Blackhawks Patrick Kan |130.0        |
     +----------+-------------------+----------------------------------------------+-------------+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 **DF API:**
 
@@ -2695,8 +2671,9 @@ spark.sql(strip_margin(
     |1160      |52                 |Reebok Women's Chicago Blackhawks Patrick Kan |130.0        |
     +----------+-------------------+----------------------------------------------+-------------+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 [Back to Top](#Table-of-contents)
 
@@ -2724,8 +2701,9 @@ spark.sql(strip_margin(
     |496       |22                 |SOLE F85 Treadmill                              |1799.99      |
     |1048      |47                 |"Spalding Beast 60"" Glass Portable Basketball "|1099.99      |
     +----------+-------------------+------------------------------------------------+-------------+
-    
-    
+
+
+​    
 
 **DF API:**
 
@@ -2747,8 +2725,9 @@ spark.sql(strip_margin(
     |496       |22                 |SOLE F85 Treadmill                              |1799.99      |
     |1048      |47                 |"Spalding Beast 60"" Glass Portable Basketball "|1099.99      |
     +----------+-------------------+------------------------------------------------+-------------+
-    
-    
+
+
+​    
 
 [Back to Top](#Table-of-contents)
 
@@ -2795,8 +2774,9 @@ spark.sql(strip_margin(
     |5                  |90        |Nike Men's LeBron XI Basketball Shoe            |199.99       |5      |
     +-------------------+----------+------------------------------------------------+-------------+-------+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 **DF API:**
 
@@ -2839,8 +2819,9 @@ windowSpec = Window.partitionBy(products_df['product_category_id']).orderBy(prod
     |5                  |90        |Nike Men's LeBron XI Basketball Shoe            |199.99       |5      |
     +-------------------+----------+------------------------------------------------+-------------+-------+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 [Back to Top](#Table-of-contents)
 
@@ -2895,8 +2876,9 @@ spark.sql(strip_margin(
     |5                  |79        |Fitness Gear 300 lb Olympic Weight Set          |209.99       |3   |
     +-------------------+----------+------------------------------------------------+-------------+----+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 **DF API:**
 
@@ -2952,8 +2934,9 @@ top_five_per_ctg.show(truncate=False)
     |5                  |79        |Fitness Gear 300 lb Olympic Weight Set          |209.99       |3   |
     +-------------------+----------+------------------------------------------------+-------------+----+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 
 ```python
@@ -3036,8 +3019,9 @@ spark.sql(strip_margin(
     |5                  |74        |"Goaliath 54"" In-Ground Basketball Hoop with P"|499.99       |1         |
     +-------------------+----------+------------------------------------------------+-------------+----------+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 **DF API:**
 
@@ -3080,8 +3064,9 @@ windowSpec = Window.partitionBy(products_df['product_category_id']).orderBy(prod
     |5                  |74        |"Goaliath 54"" In-Ground Basketball Hoop with P"|499.99       |1         |
     +-------------------+----------+------------------------------------------------+-------------+----------+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 [Back to Top](#Table-of-contents)
 
@@ -3138,8 +3123,9 @@ spark.sql(strip_margin(
     |2013-08-12 00:00:00.0|7565             |Jean Donovan    |1659.86    |
     +---------------------+-----------------+----------------+-----------+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 **DF API:**
 
@@ -3178,8 +3164,9 @@ rev_per_day_per_cust.show(5, truncate=False)
     |2013-08-03 00:00:00.0|6698             |709.94     |
     +---------------------+-----------------+-----------+
     only showing top 5 rows
-    
-    
+
+
+​    
 
 
 ```python
@@ -3218,8 +3205,9 @@ top_cust_per_day_by_rev.show(5, truncate=False)
     |2013-07-29 00:00:00.0|2632             |1389.86    |1   |
     +---------------------+-----------------+-----------+----+
     only showing top 5 rows
-    
-    
+
+
+​    
 
 
 ```python
@@ -3254,8 +3242,9 @@ top_cust_per_day_by_rev.show(5, truncate=False)
     |2014-05-02 00:00:00.0|578              |Dylan Knapp     |1559.78    |
     +---------------------+-----------------+----------------+-----------+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 
 ```python
@@ -3363,8 +3352,9 @@ df.show(truncate=False)
     |Sep        |Mary Rodriguez   |3233.62    |2         |
     |Sep        |Kevin Smith      |3134.56    |3         |
     +-----------+-----------------+-----------+----------+
-    
-    
+
+
+​    
 
 
 ```python
@@ -3427,8 +3417,9 @@ rev_per_month_per_cust.show(5, truncate=False)
     |Jul        |9639             |129.99     |
     +-----------+-----------------+-----------+
     only showing top 5 rows
-    
-    
+
+
+​    
 
 
 ```python
@@ -3467,8 +3458,9 @@ top_cust_per_month_by_rev.show(5, truncate=False)
     |Dec        |10291            |3497.69    |2         |
     +-----------+-----------------+-----------+----------+
     only showing top 5 rows
-    
-    
+
+
+​    
 
 
 ```python
@@ -3502,8 +3494,9 @@ top_cust_per_month_by_rev.show(5, truncate=False)
     |Oct        |10653            |Mary Smith       |2959.77    |2         |
     |Sep        |11516            |Kevin Smith      |3134.56    |3         |
     +-----------+-----------------+-----------------+-----------+----------+
-    
-    
+
+
+​    
 
 
 ```python
@@ -3559,8 +3552,9 @@ spark.sql(strip_margin(
     |                  5|                  403|                  1|             129.99|
     +-------------------+---------------------+-------------------+-------------------+
     only showing top 10 rows
-    
-    
+
+
+​    
 
 **Corner Case:**
 
@@ -3583,8 +3577,9 @@ spark.sql(strip_margin(
     |                148|                  502|                  2|              100.0|
     |                148|                  502|                  5|              250.0|
     +-------------------+---------------------+-------------------+-------------------+
-    
-    
+
+
+​    
 
 **SQL:**
 
@@ -3633,8 +3628,9 @@ spark.sql(strip_margin(
     |     8|  365|  502|   729.84|
     +------+-----+-----+---------+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 **DF API:**
 
@@ -3704,8 +3700,9 @@ df.show()
     |     8|  365|  502|   729.84|
     +------+-----+-----+---------+
     only showing top 20 rows
-    
-    
+
+
+​    
 
 
 ```python
@@ -3749,8 +3746,9 @@ spark.sql("select customer_id, customer_fname, customer_lname from customers").s
     |         10|       Melissa|         Smith|
     +-----------+--------------+--------------+
     only showing top 10 rows
-    
-    
+
+
+​    
 
 Second, let's see which all customers placed ordes in August 2013:
 
@@ -3780,8 +3778,9 @@ spark.sql("""
     |11672            |1306    |2013-08-01 00:00:00.0|
     +-----------------+--------+---------------------+
     only showing top 10 rows
-    
-    
+
+
+​    
 
 Third, Use `LEFT ANTI JOIN` combining both the queries above to find which customers did not place any order in August 2013:
 
@@ -3803,8 +3802,9 @@ spark.sql("select distinct order_status from orders").show()
     |        PENDING|
     |       CANCELED|
     +---------------+
-    
-    
+
+
+​    
 
 
 ```python
@@ -3837,8 +3837,9 @@ spark.sql("""
     |       1591|   Charles Johnson|
     +-----------+------------------+
     only showing top 10 rows
-    
-    
+
+
+​    
 
 Fourth, Verify with a customer from our result set that he indeed did not place any order in August 2013:
 
@@ -3859,8 +3860,9 @@ spark.sql("""
     |order_customer_id|order_id|order_date|
     +-----------------+--------+----------+
     +-----------------+--------+----------+
-    
-    
+
+
+​    
 
 **DF API:**
 
@@ -3896,8 +3898,9 @@ Note: the usage of join expression and join type.
     |       1591|   Charles Johnson|
     +-----------+------------------+
     only showing top 10 rows
-    
-    
+
+
+​    
 
 [Back to Top](#Table-of-contents)
 
@@ -3938,8 +3941,9 @@ spark.sql("""
     |       8069|       Tiffany|      Mcdaniel|         13|
     +-----------+--------------+--------------+-----------+
     only showing top 10 rows
-    
-    
+
+
+​    
 
 **DF API:**
 
@@ -3973,8 +3977,9 @@ Note: There is no `HAVING` equivalent in DataFrame APIs. We can use the traditio
     |       8069|       Tiffany|      Mcdaniel|         13|
     +-----------+--------------+--------------+-----------+
     only showing top 10 rows
-    
-    
+
+
+​    
 
 [Back to Top](#Table-of-contents)
 
