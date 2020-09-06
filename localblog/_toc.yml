@@ -2,18 +2,17 @@
 
 - part: Machine Learning With Python
   chapters:
-  - file: bcg/breast-cancer-risk-prediction-classification
-  - file: bc/breast-cancer-risk-prediction-classification
-  - file: kg/kaggle-bike-sharing-demand
+  - file: machine-learning-with-python/breast-cancer-risk-prediction-classification/breast-cancer-risk-prediction-classification.md
+  - file: machine-learning-with-python//kaggle-bike-sharing-demand/kaggle-bike-sharing-demand.md
 
 - part: Data Science with Spark
   chapters:
-  - file: cluster-uber-trip-data/cluster-uber-trip-data.md
-  - file: retail-database-analysis-python/retail-database-analysis-python.md
+  - file: data-science-with-spark/cluster-uber-trip-data/cluster-uber-trip-data.md
+  - file: data-science-with-spark/retail-database-analysis-python/retail-database-analysis-python.md
 
 - part: Leetcode Solutions
   chapters:
-  - file: leetcode/lc1433
-  - file: leetcode/lc5455
-  - file: leetcode/lc5456
+  - file: leetcode/lc1433.md
+  - file: leetcode/lc5455.md
+  - file: leetcode/lc5456.md
 
