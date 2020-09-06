@@ -1,0 +1,1258 @@
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clustering Uber’s Trip Data with Apache Spark &#8212; Anindya&#39;s Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+    <link href="../_static/css/index.css" rel="stylesheet">
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-dropdown.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Advanced Data Analysis of a Retail Store using Apache Spark (PySpark)" href="../retail-database-analysis-python/retail-database-analysis-python.html" />
+    <link rel="prev" title="Kaggle - Predicting Bike Sharing Demand" href="../kg/kaggle-bike-sharing-demand.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="docsearch:language" content="en">
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Anindya's Blog</h1>
+  
+</a>
+</div>
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Welcome to your Jupyter Book
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Machine Learning With Python
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../bcg/breast-cancer-risk-prediction-classification.html">
+   Classification: Predict Diagnosis of a Breast Tumor as Malignant or Benign
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../bc/breast-cancer-risk-prediction-classification.html">
+   Classification: Predict Diagnosis of a Breast Tumor as Malignant or Benign
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../kg/kaggle-bike-sharing-demand.html">
+   Kaggle - Predicting Bike Sharing Demand
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Data Science with Spark
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Clustering Uber’s Trip Data with Apache Spark
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../retail-database-analysis-python/retail-database-analysis-python.html">
+   Advanced Data Analysis of a Retail Store using Apache Spark (PySpark)
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Leetcode Solutions
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../leetcode/lc5455.html">
+   5455. Minimum Number of Days to Make m Bouquets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../leetcode/lc5455.html#solution">
+   Solution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../leetcode/lc5456.html">
+   5456. Kth Ancestor of a Tree Node
+  </a>
+ </li>
+</ul>
+
+</nav>
+
+ <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        <div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/cluster-uber-trip-data/cluster-uber-trip-data.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+    
+</div>
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#clustering">
+   CLUSTERING
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#understanding-the-data-set">
+   1. Understanding the Data Set
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#creating-the-spark-session">
+   2. Creating the Spark Session
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#load-the-data-from-a-file-into-a-dataframe">
+   3. Load The Data From a File Into a Dataframe
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#summary-statistics">
+     Summary Statistics
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#prepare-train-and-test-set">
+   4. Prepare Train and Test Set
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#define-features-array">
+     4.1 Define Features Array:
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#split-into-training-and-testing-set">
+     4.2 Split into Training and Testing Set:
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#k-means">
+   5. k-means
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#train-k-means">
+     5.1 Train k-Means:
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#predict-with-k-means">
+     5.2 Predict with k-Means:
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#k-means-metrics-summary">
+     5.3 k-means Metrics Summary:
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#persist-k-means-model">
+     5.4 Persist k-means Model:
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#data-exploration">
+   6. Data Exploration
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#which-hours-of-the-day-and-which-cluster-had-the-highest-number-of-pickups">
+     6.1 Which hours of the day and which cluster had the highest number of pickups?
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#how-many-pickups-occurred-in-each-cluster">
+     6.2 How many pickups occurred in each cluster?
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#how-many-pickups-occurred-in-each-hour">
+     6.3 How many pickups occurred in each hour?
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#bisecting-k-means">
+   8. Bisecting k-means
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#bisecting-k-means-summary">
+     8.1 Bisecting k-means Summary
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#gaussian-mixture-models">
+   9. Gaussian Mixture Models
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#gaussian-mixture-model-summary">
+     9.1 Gaussian Mixture Model Summary
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+        </nav>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="clustering-uber-s-trip-data-with-apache-spark">
+<h1>Clustering Uber’s Trip Data with Apache Spark<a class="headerlink" href="#clustering-uber-s-trip-data-with-apache-spark" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="clustering">
+<h2>CLUSTERING<a class="headerlink" href="#clustering" title="Permalink to this headline">¶</a></h2>
+<p>The original Scala based tutorial on Zeppelin Notebooks is at https://mapr.com/blog/monitoring-real-time-uber-data-using-spark-machine-learning-streaming-and-kafka-api-part-1/. I have coverted them to Python and also configured to run the codes on Jupter Notebooks with Pyspark 2.2 and used the Jupyter Notebook to render visualization and added more stuffs.</p>
+<p>Cluster analysis or clustering is the task of grouping a set of objects in such a way that objects in the same group (called a cluster) are more similar (in some sense) to each other than to those in other groups (clusters). It is a main task of exploratory data mining, and a common technique for statistical data analysis, used in many fields, including machine learning, pattern recognition, image analysis, information retrieval, bioinformatics, data compression, and computer graphics. [Source:https://en.wikipedia.org/wiki/Cluster_analysis]</p>
+<p>We will discover the clusters of Uber data based on the longitude and latitude, then we will analyze the cluster centers by date/time.</p>
+</div>
+<div class="section" id="understanding-the-data-set">
+<h2>1. Understanding the Data Set<a class="headerlink" href="#understanding-the-data-set" title="Permalink to this headline">¶</a></h2>
+<p>Our data is Uber trip data from http://data.beta.nyc/dataset/uber-trip-data-foiled-apr-sep-2014. In this example, we will discover the clusters of Uber data based on the longitude and latitude, then we will analyze the cluster centers by date/time. The data set has the following schema:.</p>
+<p style="text-align: justify;"></p>
+<pre>
+<strong>Date/Time:</strong>The date and time of the Uber pickup
+<strong>Lat:</strong>The latitude of the Uber pickup
+<strong>Lon:</strong>The longitude of the Uber pickup
+<strong>Base:</strong>The TLC base company affiliated with the Uber pickup
+</pre>
+<p>The Data Records are in CSV format. An example line is shown below:</p>
+<p><code class="docutils literal notranslate"><span class="pre">2014-08-01</span> <span class="pre">00:00:00,40.729,-73.9422,B02598</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">pyspark</span> <span class="kn">import</span> <span class="n">SparkConf</span><span class="p">,</span> <span class="n">SparkContext</span>
+<span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">SparkSession</span><span class="p">,</span> <span class="n">SQLContext</span>
+
+<span class="kn">from</span> <span class="nn">pyspark.sql.types</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">udf</span><span class="p">,</span> <span class="n">col</span>
+<span class="kn">import</span> <span class="nn">pyspark.sql.functions</span> <span class="k">as</span> <span class="nn">F</span>
+
+<span class="kn">from</span> <span class="nn">pyspark.ml.feature</span> <span class="kn">import</span> <span class="n">VectorAssembler</span>
+
+<span class="kn">from</span> <span class="nn">pyspark.ml.clustering</span> <span class="kn">import</span> <span class="n">KMeans</span><span class="p">,</span> <span class="n">BisectingKMeans</span><span class="p">,</span> <span class="n">GaussianMixture</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualization</span>
+<span class="kn">from</span> <span class="nn">IPython.core.interactiveshell</span> <span class="kn">import</span> <span class="n">InteractiveShell</span>
+<span class="n">InteractiveShell</span><span class="o">.</span><span class="n">ast_node_interactivity</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.max_columns&#39;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.max_colwidth&#39;</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;figure&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">context</span><span class="o">=</span><span class="s1">&#39;notebook&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;whitegrid&#39;</span><span class="p">,</span> <span class="n">rc</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">4</span><span class="p">)})</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">suppress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<span class="o">%</span><span class="n">config</span> <span class="n">InlineBackend</span><span class="o">.</span><span class="n">figure_format</span> <span class="o">=</span> <span class="s1">&#39;retina&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># setting random seed for notebook reproducability</span>
+<span class="n">rnd_seed</span><span class="o">=</span><span class="mi">42</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="o">=</span><span class="n">rnd_seed</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_state</span><span class="o">=</span><span class="n">rnd_seed</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-the-spark-session">
+<h2>2. Creating the Spark Session<a class="headerlink" href="#creating-the-spark-session" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The following must be set in your .bashrc file</span>
+<span class="c1">#SPARK_HOME=&quot;/home/ubuntu/spark-2.4.0-bin-hadoop2.7&quot;</span>
+<span class="c1">#ANACONDA_HOME=&quot;/home/ubuntu/anaconda3/envs/pyspark&quot;</span>
+<span class="c1">#PYSPARK_PYTHON=&quot;$ANACONDA_HOME/bin/python&quot;</span>
+<span class="c1">#PYSPARK_DRIVER_PYTHON=&quot;$ANACONDA_HOME/bin/python&quot;</span>
+<span class="c1">#PYTHONPATH=&quot;$ANACONDA_HOME/bin/python&quot;</span>
+<span class="c1">#export PATH=&quot;$ANACONDA_HOME/bin:$SPARK_HOME/bin:$PATH&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spark</span> <span class="o">=</span> <span class="p">(</span><span class="n">SparkSession</span>
+         <span class="o">.</span><span class="n">builder</span>
+         <span class="o">.</span><span class="n">master</span><span class="p">(</span><span class="s2">&quot;local[*]&quot;</span><span class="p">)</span>
+         <span class="o">.</span><span class="n">appName</span><span class="p">(</span><span class="s2">&quot;cluster-uber-trip-data&quot;</span><span class="p">)</span>
+         <span class="o">.</span><span class="n">getOrCreate</span><span class="p">())</span>
+<span class="n">spark</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;div&gt;
+    &lt;p&gt;&lt;b&gt;SparkSession - in-memory&lt;/b&gt;&lt;/p&gt;
+</pre></div>
+</div>
+<div>
+    <p><b>SparkContext</b></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;p&gt;&lt;a href=&quot;http://ip-172-30-2-158.ec2.internal:4040&quot;&gt;Spark UI&lt;/a&gt;&lt;/p&gt;
+
+&lt;dl&gt;
+  &lt;dt&gt;Version&lt;/dt&gt;
+    &lt;dd&gt;&lt;code&gt;v2.4.0&lt;/code&gt;&lt;/dd&gt;
+  &lt;dt&gt;Master&lt;/dt&gt;
+    &lt;dd&gt;&lt;code&gt;local[*]&lt;/code&gt;&lt;/dd&gt;
+  &lt;dt&gt;AppName&lt;/dt&gt;
+    &lt;dd&gt;&lt;code&gt;cluster-uber-trip-data&lt;/code&gt;&lt;/dd&gt;
+&lt;/dl&gt;
+</pre></div>
+</div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;/div&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="load-the-data-from-a-file-into-a-dataframe">
+<h2>3. Load The Data From a File Into a Dataframe<a class="headerlink" href="#load-the-data-from-a-file-into-a-dataframe" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">UBER_DATA</span> <span class="o">=</span> <span class="s1">&#39;data/uber.csv&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># define the schema, corresponding to a line in the JSON data file.</span>
+<span class="n">schema</span> <span class="o">=</span> <span class="n">StructType</span><span class="p">([</span>
+    <span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;dt&quot;</span><span class="p">,</span> <span class="n">TimestampType</span><span class="p">(),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="n">DoubleType</span><span class="p">(),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;lon&quot;</span><span class="p">,</span> <span class="n">DoubleType</span><span class="p">(),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;base&quot;</span><span class="p">,</span> <span class="n">StringType</span><span class="p">(),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">)]</span>
+  <span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load training data</span>
+<span class="n">uber_df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">UBER_DATA</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">)</span>
+<span class="n">uber_df</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DataFrame[dt: timestamp, lat: double, lon: double, base: string]
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">uber_df</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>+-------------------+-------+--------+------+
+|                 dt|    lat|     lon|  base|
++-------------------+-------+--------+------+
+|2014-08-01 00:00:00| 40.729|-73.9422|B02598|
+|2014-08-01 00:00:00|40.7476|-73.9871|B02598|
+|2014-08-01 00:00:00|40.7424|-74.0044|B02598|
+|2014-08-01 00:00:00| 40.751|-73.9869|B02598|
+|2014-08-01 00:00:00|40.7406|-73.9902|B02598|
+|2014-08-01 00:00:00|40.6994|-73.9591|B02617|
+|2014-08-01 00:00:00|40.6917|-73.9398|B02617|
+|2014-08-01 00:00:00|40.7063|-73.9223|B02617|
+|2014-08-01 00:00:00|40.6759|-74.0168|B02617|
+|2014-08-01 00:00:00|40.7617|-73.9847|B02617|
++-------------------+-------+--------+------+
+only showing top 10 rows
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">uber_df</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>root
+ |-- dt: timestamp (nullable = true)
+ |-- lat: double (nullable = true)
+ |-- lon: double (nullable = true)
+ |-- base: string (nullable = true)
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># How may Records?</span>
+<span class="n">uber_df</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>829275
+</pre></div>
+</div>
+<div class="section" id="summary-statistics">
+<h3>Summary Statistics<a class="headerlink" href="#summary-statistics" title="Permalink to this headline">¶</a></h3>
+<p>Spark DataFrames include some built-in functions for statistical processing. The describe() function performs summary statistics calculations on all numeric columns and returns them as a DataFrame.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">uber_df</span><span class="o">.</span><span class="n">describe</span><span class="p">([</span><span class="s2">&quot;dt&quot;</span><span class="p">,</span> <span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>+-------+------------------+--------------------+
+|summary|               lat|                 lon|
++-------+------------------+--------------------+
+|  count|            829275|              829275|
+|   mean|40.737780735823684|  -73.97016031316477|
+| stddev|0.0436280608468733|0.061482728345184666|
+|    min|           39.6569|            -74.7737|
+|    max|           41.3182|            -72.3359|
++-------+------------------+--------------------+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="prepare-train-and-test-set">
+<h2>4. Prepare Train and Test Set<a class="headerlink" href="#prepare-train-and-test-set" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="define-features-array">
+<h3>4.1 Define Features Array:<a class="headerlink" href="#define-features-array" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">feature_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Vectorize the numerical features first</span>
+<span class="n">feature_assembler</span> <span class="o">=</span> <span class="n">VectorAssembler</span><span class="p">(</span><span class="n">inputCols</span><span class="o">=</span><span class="n">feature_columns</span><span class="p">,</span> <span class="n">outputCol</span><span class="o">=</span><span class="s2">&quot;features&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">uber_assembled_df</span> <span class="o">=</span> <span class="n">feature_assembler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">uber_df</span><span class="p">)</span>
+<span class="n">uber_assembled_df</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DataFrame[dt: timestamp, lat: double, lon: double, base: string, features: vector]
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">uber_assembled_df</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>+-------------------+-------+--------+------+------------------+
+|                 dt|    lat|     lon|  base|          features|
++-------------------+-------+--------+------+------------------+
+|2014-08-01 00:00:00| 40.729|-73.9422|B02598| [40.729,-73.9422]|
+|2014-08-01 00:00:00|40.7476|-73.9871|B02598|[40.7476,-73.9871]|
+|2014-08-01 00:00:00|40.7424|-74.0044|B02598|[40.7424,-74.0044]|
+|2014-08-01 00:00:00| 40.751|-73.9869|B02598| [40.751,-73.9869]|
+|2014-08-01 00:00:00|40.7406|-73.9902|B02598|[40.7406,-73.9902]|
+|2014-08-01 00:00:00|40.6994|-73.9591|B02617|[40.6994,-73.9591]|
+|2014-08-01 00:00:00|40.6917|-73.9398|B02617|[40.6917,-73.9398]|
+|2014-08-01 00:00:00|40.7063|-73.9223|B02617|[40.7063,-73.9223]|
+|2014-08-01 00:00:00|40.6759|-74.0168|B02617|[40.6759,-74.0168]|
+|2014-08-01 00:00:00|40.7617|-73.9847|B02617|[40.7617,-73.9847]|
++-------------------+-------+--------+------+------------------+
+only showing top 10 rows
+</pre></div>
+</div>
+</div>
+<div class="section" id="split-into-training-and-testing-set">
+<h3>4.2 Split into Training and Testing Set:<a class="headerlink" href="#split-into-training-and-testing-set" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">train_df</span><span class="p">,</span> <span class="n">test_df</span> <span class="o">=</span> <span class="n">uber_assembled_df</span><span class="o">.</span><span class="n">randomSplit</span><span class="p">([</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span> <span class="n">seed</span><span class="o">=</span><span class="n">rnd_seed</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># cache the training and testing set</span>
+<span class="n">train_df</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>
+<span class="n">test_df</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DataFrame[dt: timestamp, lat: double, lon: double, base: string, features: vector]
+
+
+
+
+
+
+DataFrame[dt: timestamp, lat: double, lon: double, base: string, features: vector]
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># remove the not needed dataframes</span>
+<span class="n">uber_df</span><span class="o">.</span><span class="n">unpersist</span><span class="p">()</span>
+<span class="n">uber_assembled_df</span><span class="o">.</span><span class="n">unpersist</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DataFrame[dt: timestamp, lat: double, lon: double, base: string]
+
+
+
+
+
+
+DataFrame[dt: timestamp, lat: double, lon: double, base: string, features: vector]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="k-means">
+<h2>5. k-means<a class="headerlink" href="#k-means" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">k-means</span></code> is one of the most popular clustering algorithms. In this algorithm, a user-specified number of clusters <code class="docutils literal notranslate"><span class="pre">(k)</span></code> are randomly assigned to different points in the dataset. The unassigned points are then “assigned” to a cluster based on their proximity (measured in Euclidean distance) to the previously assigned point. Once this assignment happens, the center of this cluster (called the <code class="docutils literal notranslate"><span class="pre">centroid</span></code>) is computed, and the process repeats. All points are assigned to a particular centroid, and a new centroid is computed. We repeat this process for a finite number of iterations or until convergence (i.e., when our centroid locations stop changing). This does not, however, mean that our clusters are always sensical. For instance, a given “logical” cluster of data might be split right down the middle simply because of the starting points of two distinct clusters. Thus, it is often a good idea to perform multiple runs of k-means starting with different initializations.</p>
+<p>Choosing the right value for <code class="docutils literal notranslate"><span class="pre">k</span></code> is an extremely important aspect of using this algorithm successfully, as well as a hard task. There’s no real prescription for the number of clusters you need, so we’ll likely have to experiment with different values and consider what we would like the end result to be.</p>
+<div class="section" id="train-k-means">
+<h3>5.1 Train k-Means:<a class="headerlink" href="#train-k-means" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">initMode</span><span class="o">=</span><span class="s1">&#39;k-means||&#39;</span><span class="p">,</span> <span class="n">featuresCol</span><span class="o">=</span><span class="s1">&#39;features&#39;</span><span class="p">,</span> <span class="n">predictionCol</span><span class="o">=</span><span class="s1">&#39;cluster&#39;</span><span class="p">,</span> <span class="n">maxIter</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">kmModel</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;KMeans Cluster Centers: &quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">center</span> <span class="ow">in</span> <span class="n">kmModel</span><span class="o">.</span><span class="n">clusterCenters</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">center</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>KMeans Cluster Centers: 
+[ 40.7285 -74.005 ]
+[ 40.6703 -73.9773]
+[ 40.8256 -73.8865]
+[ 40.6662 -73.752 ]
+[ 40.7394 -73.8784]
+[ 40.3674 -74.2174]
+[ 40.7652 -73.9751]
+[ 40.7167 -73.9546]
+</pre></div>
+</div>
+</div>
+<div class="section" id="predict-with-k-means">
+<h3>5.2 Predict with k-Means:<a class="headerlink" href="#predict-with-k-means" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">test_preds</span> <span class="o">=</span> <span class="n">kmModel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_df</span><span class="p">)</span>
+<span class="n">test_preds</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DataFrame[dt: timestamp, lat: double, lon: double, base: string, features: vector, cluster: int]
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">test_preds</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>+-------------------+-------+--------+------+------------------+-------+
+|                 dt|    lat|     lon|  base|          features|cluster|
++-------------------+-------+--------+------+------------------+-------+
+|2014-08-01 00:00:00|40.3495|-74.0667|B02682|[40.3495,-74.0667]|      5|
+|2014-08-01 00:00:00|40.6754| -74.017|B02682| [40.6754,-74.017]|      1|
+|2014-08-01 00:00:00|40.6759|-74.0168|B02617|[40.6759,-74.0168]|      1|
+|2014-08-01 00:00:00|40.7303|-74.0029|B02682|[40.7303,-74.0029]|      0|
+|2014-08-01 00:00:00|40.7424|-74.0044|B02598|[40.7424,-74.0044]|      0|
+|2014-08-01 00:01:00|40.7052|-74.0094|B02598|[40.7052,-74.0094]|      0|
+|2014-08-01 00:01:00|40.7108|-73.9679|B02598|[40.7108,-73.9679]|      7|
+|2014-08-01 00:01:00|40.7341| -73.989|B02617| [40.7341,-73.989]|      0|
+|2014-08-01 00:01:00|40.7552|-73.9724|B02682|[40.7552,-73.9724]|      6|
+|2014-08-01 00:01:00|40.7633|-73.9891|B02617|[40.7633,-73.9891]|      6|
++-------------------+-------+--------+------+------------------+-------+
+only showing top 10 rows
+</pre></div>
+</div>
+</div>
+<div class="section" id="k-means-metrics-summary">
+<h3>5.3 k-means Metrics Summary:<a class="headerlink" href="#k-means-metrics-summary" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">k-means</span></code> includes a summary class that we can use to evaluate our model. This class provides some common measures for <code class="docutils literal notranslate"><span class="pre">k-means</span></code> success (whether these apply to our problem set is another question). The <code class="docutils literal notranslate"><span class="pre">k-means</span></code> summary includes information about the clusters created, as well as their relative sizes (number of examples).</p>
+<p>We can also compute the <code class="docutils literal notranslate"><span class="pre">within</span> <span class="pre">set</span> <span class="pre">sum</span> <span class="pre">of</span> <span class="pre">squared</span> <span class="pre">errors</span></code>, which can help measure how close our values are from each cluster centroid, using <code class="docutils literal notranslate"><span class="pre">computeCost</span></code>. The implicit goal in <code class="docutils literal notranslate"><span class="pre">k-means</span></code> is that we want to minimize the within set sum of squared error, subject to the given number k of clusters:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">kmModel</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">clusterSizes</span><span class="p">)</span> <span class="c1"># No of pints in each cluster</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[213275, 45748, 13291, 19640, 26871, 619, 210829, 50154]
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">kmModel</span><span class="o">.</span><span class="n">computeCost</span><span class="p">(</span><span class="n">train_df</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>946.9906526721418
+</pre></div>
+</div>
+</div>
+<div class="section" id="persist-k-means-model">
+<h3>5.4 Persist k-means Model:<a class="headerlink" href="#persist-k-means-model" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">kmModel</span><span class="o">.</span><span class="n">write</span><span class="p">()</span><span class="o">.</span><span class="n">overwrite</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;data/model&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="data-exploration">
+<h2>6. Data Exploration<a class="headerlink" href="#data-exploration" title="Permalink to this headline">¶</a></h2>
+<p>We can use Spark SQL to explore the dataset. Here are some example queries using the Spark SQL. We will also replicate the same results that we get using Spark SQL by calling the Spark Dataframe APIs directly.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">test_preds</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;test_preds&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
+
+<span class="k">def</span> <span class="nf">strip_margin</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="n">nomargin</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">[ </span><span class="se">\t</span><span class="s1">]*\|&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">trimmed</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\s+&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">nomargin</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">trimmed</span>
+</pre></div>
+</div>
+<div class="section" id="which-hours-of-the-day-and-which-cluster-had-the-highest-number-of-pickups">
+<h3>6.1 Which hours of the day and which cluster had the highest number of pickups?<a class="headerlink" href="#which-hours-of-the-day-and-which-cluster-had-the-highest-number-of-pickups" title="Permalink to this headline">¶</a></h3>
+<p><strong>SQL:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sql_result_df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="n">strip_margin</span><span class="p">(</span>
+                        <span class="sd">&quot;&quot;&quot;SELECT </span>
+<span class="sd">                          |    HOUR(dt) AS hour, </span>
+<span class="sd">                          |    cluster,</span>
+<span class="sd">                          |    COUNT(*) as count</span>
+<span class="sd">                          |FROM test_preds</span>
+<span class="sd">                          |GROUP BY hour, cluster</span>
+<span class="sd">                          |ORDER BY count DESC</span>
+<span class="sd">                        &quot;&quot;&quot;</span><span class="p">))</span>
+<span class="n">sql_result_df</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DataFrame[hour: int, cluster: int, count: bigint]
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sql_result_df</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>+----+-------+-----+
+|hour|cluster|count|
++----+-------+-----+
+|  17|      6| 7068|
+|  16|      6| 6849|
+|  18|      6| 6641|
+|  17|      0| 6314|
+|  19|      6| 6019|
+|  18|      0| 6014|
+|  21|      0| 5923|
+|  19|      0| 5862|
+|  20|      0| 5853|
+|  16|      0| 5849|
++----+-------+-----+
+only showing top 10 rows
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;hour&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;cluster&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">sql_result_df</span><span class="o">.</span><span class="n">toPandas</span><span class="p">());</span>
+</pre></div>
+</div>
+<p><img alt="png" src="../_images/output_47_01.png" /></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sql_result_df</span><span class="o">.</span><span class="n">unpersist</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DataFrame[hour: int, cluster: int, count: bigint]
+</pre></div>
+</div>
+<p><strong>DF API:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">test_preds</span>
+    <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">hour</span><span class="p">(</span><span class="s2">&quot;dt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;hour&quot;</span><span class="p">),</span> <span class="s2">&quot;cluster&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">groupBy</span><span class="p">([</span><span class="s2">&quot;hour&quot;</span><span class="p">,</span> <span class="s2">&quot;cluster&quot;</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">count</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">orderBy</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">desc</span><span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>+----+-------+-----+
+|hour|cluster|count|
++----+-------+-----+
+|  17|      6| 7068|
+|  16|      6| 6849|
+|  18|      6| 6641|
+|  17|      0| 6314|
+|  19|      6| 6019|
+|  18|      0| 6014|
+|  21|      0| 5923|
+|  19|      0| 5862|
+|  20|      0| 5853|
+|  16|      0| 5849|
++----+-------+-----+
+only showing top 10 rows
+</pre></div>
+</div>
+</div>
+<div class="section" id="how-many-pickups-occurred-in-each-cluster">
+<h3>6.2 How many pickups occurred in each cluster?<a class="headerlink" href="#how-many-pickups-occurred-in-each-cluster" title="Permalink to this headline">¶</a></h3>
+<p><strong>SQL:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sql_result_df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="n">strip_margin</span><span class="p">(</span>
+                        <span class="sd">&quot;&quot;&quot;SELECT cluster, COUNT(cluster) AS count</span>
+<span class="sd">                          |FROM test_preds</span>
+<span class="sd">                          |GROUP BY cluster</span>
+<span class="sd">                          |ORDER BY cluster</span>
+<span class="sd">                        &quot;&quot;&quot;</span><span class="p">))</span>
+<span class="n">sql_result_df</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DataFrame[cluster: int, count: bigint]
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sql_result_df</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>+-------+-----+
+|cluster|count|
++-------+-----+
+|      0|91415|
+|      1|19720|
+|      2| 5765|
+|      3| 8297|
+|      4|11646|
+|      5|  264|
+|      6|90443|
+|      7|21298|
++-------+-----+
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;cluster&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">sql_result_df</span><span class="o">.</span><span class="n">toPandas</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Total Pickups By Cluster&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><img alt="png" src="../_images/output_55_01.png" /></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sql_result_df</span><span class="o">.</span><span class="n">unpersist</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DataFrame[cluster: int, count: bigint]
+</pre></div>
+</div>
+<p><strong>DF API:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">test_preds</span>
+    <span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s2">&quot;cluster&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">count</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">orderBy</span><span class="p">(</span><span class="s2">&quot;cluster&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>+-------+-----+
+|cluster|count|
++-------+-----+
+|      0|91415|
+|      1|19720|
+|      2| 5765|
+|      3| 8297|
+|      4|11646|
+|      5|  264|
+|      6|90443|
+|      7|21298|
++-------+-----+
+</pre></div>
+</div>
+</div>
+<div class="section" id="how-many-pickups-occurred-in-each-hour">
+<h3>6.3 How many pickups occurred in each hour?<a class="headerlink" href="#how-many-pickups-occurred-in-each-hour" title="Permalink to this headline">¶</a></h3>
+<p><strong>SQL:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sql_result_df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="n">strip_margin</span><span class="p">(</span>
+                        <span class="sd">&quot;&quot;&quot;SELECT </span>
+<span class="sd">                          |    HOUR(dt) AS hour, </span>
+<span class="sd">                          |    COUNT(cluster) AS count</span>
+<span class="sd">                          |FROM test_preds</span>
+<span class="sd">                          |GROUP BY hour</span>
+<span class="sd">                          |ORDER BY hour</span>
+<span class="sd">                        &quot;&quot;&quot;</span><span class="p">))</span>
+<span class="n">sql_result_df</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DataFrame[hour: int, count: bigint]
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sql_result_df</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>+----+-----+
+|hour|count|
++----+-----+
+|   0| 6404|
+|   1| 4373|
+|   2| 2934|
+|   3| 3132|
+|   4| 3495|
+|   5| 4980|
+|   6| 7554|
+|   7|10206|
+|   8|10414|
+|   9| 8959|
++----+-----+
+only showing top 10 rows
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;hour&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">sql_result_df</span><span class="o">.</span><span class="n">toPandas</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Total Pickups By Hour&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><img alt="png" src="../_images/output_63_0.png" /></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sql_result_df</span><span class="o">.</span><span class="n">unpersist</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DataFrame[hour: int, count: bigint]
+</pre></div>
+</div>
+<p><strong>DF API:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">test_preds</span>
+    <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">hour</span><span class="p">(</span><span class="s2">&quot;dt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;hour&quot;</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s2">&quot;hour&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">count</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">orderBy</span><span class="p">(</span><span class="s2">&quot;hour&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>+----+-----+
+|hour|count|
++----+-----+
+|   0| 6404|
+|   1| 4373|
+|   2| 2934|
+|   3| 3132|
+|   4| 3495|
+|   5| 4980|
+|   6| 7554|
+|   7|10206|
+|   8|10414|
+|   9| 8959|
++----+-----+
+only showing top 10 rows
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="bisecting-k-means">
+<h2>8. Bisecting k-means<a class="headerlink" href="#bisecting-k-means" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Bisecting</span> <span class="pre">k-means</span></code> is a variant of <code class="docutils literal notranslate"><span class="pre">k-means</span></code>. The core difference is that instead of clustering points by starting “bottom-up” and assigning a bunch of different groups in the data, this is a top-down clustering method. This means that it will start by creating a single group and then splitting that group into smaller groups in order to end up with the <code class="docutils literal notranslate"><span class="pre">k</span></code> number of clusters specified by the user. This is usually a faster method than <code class="docutils literal notranslate"><span class="pre">k-means</span></code> and will yield different results.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bkm</span> <span class="o">=</span> <span class="n">BisectingKMeans</span><span class="p">(</span><span class="n">featuresCol</span><span class="o">=</span><span class="s1">&#39;features&#39;</span><span class="p">,</span> <span class="n">predictionCol</span><span class="o">=</span><span class="s1">&#39;cluster&#39;</span><span class="p">,</span> <span class="n">maxIter</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bkm</span><span class="o">.</span><span class="n">explainParams</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&quot;distanceMeasure: the distance measure. Supported options: &#39;euclidean&#39; and &#39;cosine&#39;. (default: euclidean)\nfeaturesCol: features column name. (default: features, current: features)\nk: The desired number of leaf clusters. Must be &gt; 1. (default: 4, current: 8)\nmaxIter: max number of iterations (&gt;= 0). (default: 20, current: 20)\nminDivisibleClusterSize: The minimum number of points (if &gt;= 1.0) or the minimum proportion of points (if &lt; 1.0) of a divisible cluster. (default: 1.0)\npredictionCol: prediction column name. (default: prediction, current: cluster)\nseed: random seed. (default: 6273406621647201097)&quot;
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bkmModel</span> <span class="o">=</span> <span class="n">bkm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bkmModel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_df</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>+-------------------+-------+--------+------+------------------+-------+
+|                 dt|    lat|     lon|  base|          features|cluster|
++-------------------+-------+--------+------+------------------+-------+
+|2014-08-01 00:00:00|40.3495|-74.0667|B02682|[40.3495,-74.0667]|      0|
+|2014-08-01 00:00:00|40.6754| -74.017|B02682| [40.6754,-74.017]|      1|
+|2014-08-01 00:00:00|40.6759|-74.0168|B02617|[40.6759,-74.0168]|      1|
+|2014-08-01 00:00:00|40.7303|-74.0029|B02682|[40.7303,-74.0029]|      1|
+|2014-08-01 00:00:00|40.7424|-74.0044|B02598|[40.7424,-74.0044]|      1|
+|2014-08-01 00:01:00|40.7052|-74.0094|B02598|[40.7052,-74.0094]|      1|
+|2014-08-01 00:01:00|40.7108|-73.9679|B02598|[40.7108,-73.9679]|      1|
+|2014-08-01 00:01:00|40.7341| -73.989|B02617| [40.7341,-73.989]|      1|
+|2014-08-01 00:01:00|40.7552|-73.9724|B02682|[40.7552,-73.9724]|      2|
+|2014-08-01 00:01:00|40.7633|-73.9891|B02617|[40.7633,-73.9891]|      2|
++-------------------+-------+--------+------+------------------+-------+
+only showing top 10 rows
+</pre></div>
+</div>
+<div class="section" id="bisecting-k-means-summary">
+<h3>8.1 Bisecting k-means Summary<a class="headerlink" href="#bisecting-k-means-summary" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">Bisecting</span> <span class="pre">k-means</span></code> includes a summary class that we can use to evaluate our model, that is largely the same as the <code class="docutils literal notranslate"><span class="pre">k-means</span></code> summary. This includes information about the clusters created, as well as their relative sizes (number of examples):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">bkmModel</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">clusterSizes</span><span class="p">)</span> <span class="c1"># number of points</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[6175, 278747, 189087, 61129, 18610, 1562, 23194, 1923]
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bkmModel</span><span class="o">.</span><span class="n">computeCost</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>772.3023226857927
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Bisecting k-means Cluster Centers: &quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">center</span> <span class="ow">in</span> <span class="n">bkmModel</span><span class="o">.</span><span class="n">clusterCenters</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">center</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Bisecting k-means Cluster Centers: 
+[ 40.6693 -74.1934]
+[ 40.7153 -73.9884]
+[ 40.7574 -73.9807]
+[ 40.7924 -73.9497]
+[ 40.6561 -73.7797]
+[ 40.7688 -73.4668]
+[ 40.7657 -73.8626]
+[ 40.979  -73.7823]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="gaussian-mixture-models">
+<h2>9. Gaussian Mixture Models<a class="headerlink" href="#gaussian-mixture-models" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Gaussian</span> <span class="pre">mixture</span> <span class="pre">models</span> <span class="pre">(GMM)</span></code> are another popular clustering algorithm that makes different assumptions than <code class="docutils literal notranslate"><span class="pre">bisecting</span> <span class="pre">k-means</span></code> or <code class="docutils literal notranslate"><span class="pre">k-means</span></code> do. Those algorithms try to group data by reducing the sum of squared distances from the center of the cluster. Gaussian mixture models, on the other hand, assume that each cluster produces data based upon random draws from a Gaussian distribution. This means that clusters of data should be less likely to have data at the edge of the cluster (reflected in the Guassian distribution) and much higher probability of having data in the center. Each Gaussian cluster can be of arbitrary size with its own mean and standard deviation (and hence a possibly different, ellipsoid shape). There are still <code class="docutils literal notranslate"><span class="pre">k</span></code> user-specified clusters that will be created during training.</p>
+<p>A simplified way of thinking about Gaussian mixture models is that they’re like a soft version of 𝘬-means. 𝘬-means creates very rigid clusters - each point is only within one cluster. GMMs allow for a more nuanced cluster associated with probabilities, instead of rigid boundaries.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gmm</span> <span class="o">=</span> <span class="n">GaussianMixture</span><span class="p">(</span><span class="n">featuresCol</span><span class="o">=</span><span class="s1">&#39;features&#39;</span><span class="p">,</span> <span class="n">predictionCol</span><span class="o">=</span><span class="s1">&#39;cluster&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gmm</span><span class="o">.</span><span class="n">explainParams</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&#39;featuresCol: features column name. (default: features, current: features)\nk: Number of independent Gaussians in the mixture model. Must be &gt; 1. (default: 2, current: 8)\nmaxIter: max number of iterations (&gt;= 0). (default: 100)\npredictionCol: prediction column name. (default: prediction, current: cluster)\nprobabilityCol: Column name for predicted class conditional probabilities. Note: Not all models output well-calibrated probability estimates! These probabilities should be treated as confidences, not precise probabilities. (default: probability)\nseed: random seed. (default: 8705189966447162735)\ntol: the convergence tolerance for iterative algorithms (&gt;= 0). (default: 0.01)&#39;
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gmmModel</span> <span class="o">=</span> <span class="n">gmm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gmmModel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_df</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>+-------------------+-------+--------+------+------------------+-------+--------------------+
+|                 dt|    lat|     lon|  base|          features|cluster|         probability|
++-------------------+-------+--------+------+------------------+-------+--------------------+
+|2014-08-01 00:00:00|40.3495|-74.0667|B02682|[40.3495,-74.0667]|      3|[1.06308663207616...|
+|2014-08-01 00:00:00|40.6754| -74.017|B02682| [40.6754,-74.017]|      4|[9.15865650722991...|
+|2014-08-01 00:00:00|40.6759|-74.0168|B02617|[40.6759,-74.0168]|      4|[9.60775165626833...|
+|2014-08-01 00:00:00|40.7303|-74.0029|B02682|[40.7303,-74.0029]|      7|[0.00138784100546...|
+|2014-08-01 00:00:00|40.7424|-74.0044|B02598|[40.7424,-74.0044]|      6|[0.00112649565277...|
+|2014-08-01 00:01:00|40.7052|-74.0094|B02598|[40.7052,-74.0094]|      1|[0.00107517269203...|
+|2014-08-01 00:01:00|40.7108|-73.9679|B02598|[40.7108,-73.9679]|      4|[4.16398943190282...|
+|2014-08-01 00:01:00|40.7341| -73.989|B02617| [40.7341,-73.989]|      1|[0.00372386869943...|
+|2014-08-01 00:01:00|40.7552|-73.9724|B02682|[40.7552,-73.9724]|      7|[0.00879958725327...|
+|2014-08-01 00:01:00|40.7633|-73.9891|B02617|[40.7633,-73.9891]|      6|[0.00532599325455...|
++-------------------+-------+--------+------+------------------+-------+--------------------+
+only showing top 10 rows
+</pre></div>
+</div>
+<div class="section" id="gaussian-mixture-model-summary">
+<h3>9.1 Gaussian Mixture Model Summary<a class="headerlink" href="#gaussian-mixture-model-summary" title="Permalink to this headline">¶</a></h3>
+<p>Like our other clustering algorithms, Gaussian mixture models include a summary class to help with model evaluation. This includes information about the clusters created, like the weights, the means, and the covariance of the Gaussian mixture, which can help us learn more about the underlying structure inside of our data:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gmmModel</span><span class="o">.</span><span class="n">weights</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[0.033444679292671954,
+ 0.1907077608722158,
+ 0.09846089658833762,
+ 0.020507531179239213,
+ 0.15863651342428708,
+ 0.0192104771636125,
+ 0.19685292472549695,
+ 0.282179216754139]
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gmmModel</span><span class="o">.</span><span class="n">gaussiansDF</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">toPandas</span><span class="p">()</span>
+</pre></div>
+</div>
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>.dataframe thead th {
+    text-align: left;
+}
+
+.dataframe tbody tr th {
+    vertical-align: top;
+}
+</pre></div>
+</div>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>cov</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>[40.8122891258, -73.948132837]</td>
+      <td>DenseMatrix([[ 0.0012,  0.0006],\n             [ 0.0006,  0.0004]])</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>[40.7226007532, -73.9961921164]</td>
+      <td>DenseMatrix([[ 0.0001,  0.0001],\n             [ 0.0001,  0.0001]])</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>[40.6940616769, -73.9107197668]</td>
+      <td>DenseMatrix([[ 0.0024, -0.0017],\n             [-0.0017,  0.0148]])</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>[40.786598669, -73.8843730099]</td>
+      <td>DenseMatrix([[ 0.0255,  0.0091],\n             [ 0.0091,  0.0559]])</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>[40.7043786628, -73.9624994418]</td>
+      <td>DenseMatrix([[ 0.0009,  0.0004],\n             [ 0.0004,  0.0006]])</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>[40.7718590177, -73.8682761546]</td>
+      <td>DenseMatrix([[ 0., -0.],\n             [-0.,  0.]])</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>[40.7565713922, -73.9928070532]</td>
+      <td>DenseMatrix([[ 0.0004,  0.0002],\n             [ 0.0002,  0.0001]])</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>[40.7542611718, -73.9776916525]</td>
+      <td>DenseMatrix([[ 0.0002,  0.0002],\n             [ 0.0002,  0.0002]])</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">gmmModel</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">clusterSizes</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[14972, 120785, 47314, 7950, 96722, 11175, 118533, 162976]
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gmmModel</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">cluster</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>+-------+
+|cluster|
++-------+
+|      3|
+|      4|
+|      2|
+|      4|
+|      4|
+|      4|
+|      1|
+|      1|
+|      1|
+|      4|
++-------+
+only showing top 10 rows
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gmmModel</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">probability</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">toPandas</span><span class="p">()</span>
+</pre></div>
+</div>
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>.dataframe thead th {
+    text-align: left;
+}
+
+.dataframe tbody tr th {
+    vertical-align: top;
+}
+</pre></div>
+</div>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>probability</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>[1.06308663208e-13, 1.06308663208e-13, 1.13259982348e-10, 0.999999999886, 1.06308663208e-13, 1.06308663208e-13, 1.06308663208e-13, 1.06308663208e-13]</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>[2.57258559538e-13, 1.31857383539e-17, 0.155959876674, 0.00441320151399, 0.839626921812, 1.31857383467e-17, 1.31857383467e-17, 1.31857383467e-17]</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>[6.60625331474e-17, 6.60624841925e-17, 0.807242421341, 0.0226088865525, 0.170148692107, 6.60624841925e-17, 6.60624841925e-17, 6.60624841925e-17]</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>[1.03256700635e-06, 2.07043908927e-10, 0.0574508453329, 0.00175264171873, 0.940795480174, 5.22026489005e-18, 5.2202649101e-18, 5.22185401869e-18]</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>[6.70330357779e-08, 6.17953014992e-13, 0.0606290287811, 0.00181683549189, 0.937554068693, 5.35361245269e-18, 5.35361245269e-18, 5.35361264148e-18]</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>[1.68566376282e-15, 2.42308769481e-17, 0.28787510493, 0.00855777277577, 0.703567122294, 2.42308769477e-17, 2.42308769477e-17, 2.42308769477e-17]</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>[0.000558001653922, 0.923436925318, 0.00860096129908, 0.0003254051003, 0.00799715564531, 9.88264761474e-19, 0.0397719289251, 0.0193096220586]</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>[0.000915324237272, 0.973232017504, 0.00510028079851, 0.000192184935525, 0.012488620428, 5.63470906052e-19, 0.00097214507283, 0.00709942702433]</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>[0.000937241498729, 0.960671866484, 0.00442443745055, 0.000171071954326, 0.00868028103944, 4.99943986072e-19, 0.00353403892256, 0.0215810626508]</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>[5.03015669596e-07, 1.91361991824e-08, 0.0731236865718, 0.00285118563098, 0.924024605645, 7.68684305229e-18, 7.6868430523e-18, 2.95435029e-16]</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spark</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./cluster-uber-trip-data"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="../kg/kaggle-bike-sharing-demand.html" title="previous page">Kaggle - Predicting Bike Sharing Demand</a>
+    <a class='right-next' id="next-link" href="../retail-database-analysis-python/retail-database-analysis-python.html" title="next page">Advanced Data Analysis of a Retail Store using Apache Spark (PySpark)</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Anindya Saha<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    <script src="../_static/js/index.js"></script>
+    
+  </body>
+</html>

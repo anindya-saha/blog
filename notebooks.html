@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Content with notebooks &#8212; My sample book</title>
+    <title>Content with notebooks &#8212; Anindya&#39;s Blog</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="_static/css/index.css" rel="stylesheet">
     <link rel="stylesheet" href="_static/sphinx-book-theme.css" type="text/css" />
@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-dropdown.css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/sphinx-book-theme.js"></script>
@@ -38,7 +39,6 @@
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Welcome to your Jupyter Book" href="intro.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="docsearch:language" content="en">
@@ -60,7 +60,7 @@
   <img src="_static/logo.png" class="logo" alt="logo">
   
   
-  <h1 class="site-logo" id="site-title">My sample book</h1>
+  <h1 class="site-logo" id="site-title">Anindya's Blog</h1>
   
 </a>
 </div>
@@ -73,25 +73,69 @@
 <nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="markdown.html">
-   Markdown Files
-  </a>
- </li>
-</ul>
-<ul class="current nav sidenav_l1">
- <li class="toctree-l1">
-  <a class="reference internal" href="content.html">
-   Content in Jupyter Book
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="intro.html">
    Welcome to your Jupyter Book
   </a>
  </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   Content with notebooks
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Machine Learning With Python
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="bcg/breast-cancer-risk-prediction-classification.html">
+   Classification: Predict Diagnosis of a Breast Tumor as Malignant or Benign
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bc/breast-cancer-risk-prediction-classification.html">
+   Classification: Predict Diagnosis of a Breast Tumor as Malignant or Benign
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="kg/kaggle-bike-sharing-demand.html">
+   Kaggle - Predicting Bike Sharing Demand
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Data Science with Spark
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="cluster-uber-trip-data/cluster-uber-trip-data.html">
+   Clustering Uber’s Trip Data with Apache Spark
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="retail-database-analysis-python/retail-database-analysis-python.html">
+   Advanced Data Analysis of a Retail Store using Apache Spark (PySpark)
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Leetcode Solutions
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="leetcode/lc5455.html">
+   5455. Minimum Number of Days to Make m Bouquets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="leetcode/lc5455.html#solution">
+   Solution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="leetcode/lc5456.html">
+   5456. Kth Ancestor of a Tree Node
   </a>
  </li>
 </ul>
@@ -253,19 +297,6 @@ For example, here’s some sample Matplotlib code:</p>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">f5105857ecb6</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">rcParams</span><span class="p">,</span> <span class="n">cycler</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;matplotlib&#39;
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -289,6 +320,9 @@ For example, here’s some sample Matplotlib code:</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">custom_lines</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Cold&#39;</span><span class="p">,</span> <span class="s1">&#39;Medium&#39;</span><span class="p">,</span> <span class="s1">&#39;Hot&#39;</span><span class="p">]);</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/notebooks_2_0.png" src="_images/notebooks_2_0.png" />
 </div>
 </div>
 <p>There is a lot more that you can do with outputs (such as including interactive outputs)
@@ -324,14 +358,13 @@ with your book. For more information about this, see <a class="reference externa
     
     <div class='prev-next-bottom'>
         
-    <a class='left-prev' id="prev-link" href="intro.html" title="previous page">Welcome to your Jupyter Book</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
     <div class="container">
       <p>
         
-          By The Jupyter Book Community<br/>
+          By Anindya Saha<br/>
         
             &copy; Copyright 2020.<br/>
       </p>
