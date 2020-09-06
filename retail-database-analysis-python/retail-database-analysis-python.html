@@ -392,7 +392,12 @@
   <div class="section" id="advanced-data-analysis-of-a-retail-store-using-apache-spark-pyspark">
 <h1>Advanced Data Analysis of a Retail Store using Apache Spark (PySpark)<a class="headerlink" href="#advanced-data-analysis-of-a-retail-store-using-apache-spark-pyspark" title="Permalink to this headline">¶</a></h1>
 <p>In this notebook we will go through Spark SQL as well as Spark DF API based transformations and actions ranging from simple to quite complex. I use this as a reference in my day to day job. These tables come from the Cloudera Installation. A fictitious retail house with the following tables: customers, departments, categories, products, orders and order_items.</p>
-<p><code class="docutils literal notranslate"><span class="pre">&#64;author:</span> <span class="pre">Anindya</span> <span class="pre">Saha</span>&#160;&#160; <span class="pre">&#64;email:</span> <span class="pre">mail.anindya&#64;gmail.com</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@author</span><span class="p">:</span> <span class="n">Anindya</span> <span class="n">Saha</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@email</span><span class="p">:</span> <span class="n">mail</span><span class="o">.</span><span class="n">anindya</span><span class="nd">@gmail</span><span class="o">.</span><span class="n">com</span>
+</pre></div>
+</div>
 <div class="section" id="table-of-contents">
 <h2>Table of contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
 <p>A brief synopsis of what each use case is and what functionality of the SPARK SQL or DF API does it touch on.</p>
@@ -540,76 +545,76 @@
 </div>
 <div class="section" id="understanding-the-data-set">
 <h2>1. Understanding the Data Set:<a class="headerlink" href="#understanding-the-data-set" title="Permalink to this headline">¶</a></h2>
-<p><img alt="" src="retail-database-analysis-python\assets/cloudera-retail-db.png" />
+<p><img alt="" src="../_images/cloudera-retail-db.png" />
 Picture Source: https://www.cloudera.com/developers/get-started-with-hadoop-tutorial/exercise-1.html</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="n">describe</span> <span class="n">customers</span><span class="p">;</span>
-<span class="o">+-------------------+--------------+------+-----+---------+----------------+</span>
-<span class="o">|</span> <span class="n">Field</span>             <span class="o">|</span> <span class="n">Type</span>         <span class="o">|</span> <span class="n">Null</span> <span class="o">|</span> <span class="n">Key</span> <span class="o">|</span> <span class="n">Default</span> <span class="o">|</span> <span class="n">Extra</span>          <span class="o">|</span>
-<span class="o">+-------------------+--------------+------+-----+---------+----------------+</span>
-<span class="o">|</span> <span class="n">customer_id</span>       <span class="o">|</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>      <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span> <span class="n">PRI</span> <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span> <span class="n">auto_increment</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">customer_fname</span>    <span class="o">|</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span>  <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">customer_lname</span>    <span class="o">|</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span>  <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">customer_email</span>    <span class="o">|</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span>  <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">customer_password</span> <span class="o">|</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span>  <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">customer_street</span>   <span class="o">|</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span> <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">customer_city</span>     <span class="o">|</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span>  <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">customer_state</span>    <span class="o">|</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span>  <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">customer_zipcode</span>  <span class="o">|</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span>  <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">+-------------------+--------------+------+-----+---------+----------------+</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mysql&gt; describe customers<span class="p">;</span>
++-------------------+--------------+------+-----+---------+----------------+
+<span class="p">|</span> Field             <span class="p">|</span> Type         <span class="p">|</span> Null <span class="p">|</span> Key <span class="p">|</span> Default <span class="p">|</span> Extra          <span class="p">|</span>
++-------------------+--------------+------+-----+---------+----------------+
+<span class="p">|</span> customer_id       <span class="p">|</span> int<span class="o">(</span><span class="m">11</span><span class="o">)</span>      <span class="p">|</span> NO   <span class="p">|</span> PRI <span class="p">|</span> NULL    <span class="p">|</span> auto_increment <span class="p">|</span>
+<span class="p">|</span> customer_fname    <span class="p">|</span> varchar<span class="o">(</span><span class="m">45</span><span class="o">)</span>  <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
+<span class="p">|</span> customer_lname    <span class="p">|</span> varchar<span class="o">(</span><span class="m">45</span><span class="o">)</span>  <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
+<span class="p">|</span> customer_email    <span class="p">|</span> varchar<span class="o">(</span><span class="m">45</span><span class="o">)</span>  <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
+<span class="p">|</span> customer_password <span class="p">|</span> varchar<span class="o">(</span><span class="m">45</span><span class="o">)</span>  <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
+<span class="p">|</span> customer_street   <span class="p">|</span> varchar<span class="o">(</span><span class="m">255</span><span class="o">)</span> <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
+<span class="p">|</span> customer_city     <span class="p">|</span> varchar<span class="o">(</span><span class="m">45</span><span class="o">)</span>  <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
+<span class="p">|</span> customer_state    <span class="p">|</span> varchar<span class="o">(</span><span class="m">45</span><span class="o">)</span>  <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
+<span class="p">|</span> customer_zipcode  <span class="p">|</span> varchar<span class="o">(</span><span class="m">45</span><span class="o">)</span>  <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
++-------------------+--------------+------+-----+---------+----------------+
 
-<span class="n">mysql</span><span class="o">&gt;</span> <span class="n">describe</span> <span class="n">departments</span><span class="p">;</span>
-<span class="o">+-----------------+-------------+------+-----+---------+----------------+</span>
-<span class="o">|</span> <span class="n">Field</span>           <span class="o">|</span> <span class="n">Type</span>        <span class="o">|</span> <span class="n">Null</span> <span class="o">|</span> <span class="n">Key</span> <span class="o">|</span> <span class="n">Default</span> <span class="o">|</span> <span class="n">Extra</span>          <span class="o">|</span>
-<span class="o">+-----------------+-------------+------+-----+---------+----------------+</span>
-<span class="o">|</span> <span class="n">department_id</span>   <span class="o">|</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>     <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span> <span class="n">PRI</span> <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span> <span class="n">auto_increment</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">department_name</span> <span class="o">|</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span> <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">+-----------------+-------------+------+-----+---------+----------------+</span>
+mysql&gt; describe departments<span class="p">;</span>
++-----------------+-------------+------+-----+---------+----------------+
+<span class="p">|</span> Field           <span class="p">|</span> Type        <span class="p">|</span> Null <span class="p">|</span> Key <span class="p">|</span> Default <span class="p">|</span> Extra          <span class="p">|</span>
++-----------------+-------------+------+-----+---------+----------------+
+<span class="p">|</span> department_id   <span class="p">|</span> int<span class="o">(</span><span class="m">11</span><span class="o">)</span>     <span class="p">|</span> NO   <span class="p">|</span> PRI <span class="p">|</span> NULL    <span class="p">|</span> auto_increment <span class="p">|</span>
+<span class="p">|</span> department_name <span class="p">|</span> varchar<span class="o">(</span><span class="m">45</span><span class="o">)</span> <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
++-----------------+-------------+------+-----+---------+----------------+
 
-<span class="n">mysql</span><span class="o">&gt;</span> <span class="n">describe</span> <span class="n">categories</span><span class="p">;</span>
-<span class="o">+------------------------+-------------+------+-----+---------+----------------+</span>
-<span class="o">|</span> <span class="n">Field</span>                  <span class="o">|</span> <span class="n">Type</span>        <span class="o">|</span> <span class="n">Null</span> <span class="o">|</span> <span class="n">Key</span> <span class="o">|</span> <span class="n">Default</span> <span class="o">|</span> <span class="n">Extra</span>          <span class="o">|</span>
-<span class="o">+------------------------+-------------+------+-----+---------+----------------+</span>
-<span class="o">|</span> <span class="n">category_id</span>            <span class="o">|</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>     <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span> <span class="n">PRI</span> <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span> <span class="n">auto_increment</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">category_department_id</span> <span class="o">|</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>     <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">category_name</span>          <span class="o">|</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span> <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">+------------------------+-------------+------+-----+---------+----------------+</span>
+mysql&gt; describe categories<span class="p">;</span>
++------------------------+-------------+------+-----+---------+----------------+
+<span class="p">|</span> Field                  <span class="p">|</span> Type        <span class="p">|</span> Null <span class="p">|</span> Key <span class="p">|</span> Default <span class="p">|</span> Extra          <span class="p">|</span>
++------------------------+-------------+------+-----+---------+----------------+
+<span class="p">|</span> category_id            <span class="p">|</span> int<span class="o">(</span><span class="m">11</span><span class="o">)</span>     <span class="p">|</span> NO   <span class="p">|</span> PRI <span class="p">|</span> NULL    <span class="p">|</span> auto_increment <span class="p">|</span>
+<span class="p">|</span> category_department_id <span class="p">|</span> int<span class="o">(</span><span class="m">11</span><span class="o">)</span>     <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
+<span class="p">|</span> category_name          <span class="p">|</span> varchar<span class="o">(</span><span class="m">45</span><span class="o">)</span> <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
++------------------------+-------------+------+-----+---------+----------------+
 
-<span class="n">mysql</span><span class="o">&gt;</span> <span class="n">describe</span> <span class="n">products</span><span class="p">;</span>
-<span class="o">+---------------------+--------------+------+-----+---------+----------------+</span>
-<span class="o">|</span> <span class="n">Field</span>               <span class="o">|</span> <span class="n">Type</span>         <span class="o">|</span> <span class="n">Null</span> <span class="o">|</span> <span class="n">Key</span> <span class="o">|</span> <span class="n">Default</span> <span class="o">|</span> <span class="n">Extra</span>          <span class="o">|</span>
-<span class="o">+---------------------+--------------+------+-----+---------+----------------+</span>
-<span class="o">|</span> <span class="n">product_id</span>          <span class="o">|</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>      <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span> <span class="n">PRI</span> <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span> <span class="n">auto_increment</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">product_category_id</span> <span class="o">|</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>      <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">product_name</span>        <span class="o">|</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span>  <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">product_description</span> <span class="o">|</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span> <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">product_price</span>       <span class="o">|</span> <span class="nb">float</span>        <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">product_image</span>       <span class="o">|</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span> <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">+---------------------+--------------+------+-----+---------+----------------+</span>
+mysql&gt; describe products<span class="p">;</span>
++---------------------+--------------+------+-----+---------+----------------+
+<span class="p">|</span> Field               <span class="p">|</span> Type         <span class="p">|</span> Null <span class="p">|</span> Key <span class="p">|</span> Default <span class="p">|</span> Extra          <span class="p">|</span>
++---------------------+--------------+------+-----+---------+----------------+
+<span class="p">|</span> product_id          <span class="p">|</span> int<span class="o">(</span><span class="m">11</span><span class="o">)</span>      <span class="p">|</span> NO   <span class="p">|</span> PRI <span class="p">|</span> NULL    <span class="p">|</span> auto_increment <span class="p">|</span>
+<span class="p">|</span> product_category_id <span class="p">|</span> int<span class="o">(</span><span class="m">11</span><span class="o">)</span>      <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
+<span class="p">|</span> product_name        <span class="p">|</span> varchar<span class="o">(</span><span class="m">45</span><span class="o">)</span>  <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
+<span class="p">|</span> product_description <span class="p">|</span> varchar<span class="o">(</span><span class="m">255</span><span class="o">)</span> <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
+<span class="p">|</span> product_price       <span class="p">|</span> float        <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
+<span class="p">|</span> product_image       <span class="p">|</span> varchar<span class="o">(</span><span class="m">255</span><span class="o">)</span> <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
++---------------------+--------------+------+-----+---------+----------------+
 
-<span class="n">mysql</span><span class="o">&gt;</span> <span class="n">describe</span> <span class="n">orders</span><span class="p">;</span>
-<span class="o">+-------------------+-------------+------+-----+---------+----------------+</span>
-<span class="o">|</span> <span class="n">Field</span>             <span class="o">|</span> <span class="n">Type</span>        <span class="o">|</span> <span class="n">Null</span> <span class="o">|</span> <span class="n">Key</span> <span class="o">|</span> <span class="n">Default</span> <span class="o">|</span> <span class="n">Extra</span>          <span class="o">|</span>
-<span class="o">+-------------------+-------------+------+-----+---------+----------------+</span>
-<span class="o">|</span> <span class="n">order_id</span>          <span class="o">|</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>     <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span> <span class="n">PRI</span> <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span> <span class="n">auto_increment</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">order_date</span>        <span class="o">|</span> <span class="n">datetime</span>    <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">order_customer_id</span> <span class="o">|</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>     <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">order_status</span>      <span class="o">|</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span> <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">+-------------------+-------------+------+-----+---------+----------------+</span>
+mysql&gt; describe orders<span class="p">;</span>
++-------------------+-------------+------+-----+---------+----------------+
+<span class="p">|</span> Field             <span class="p">|</span> Type        <span class="p">|</span> Null <span class="p">|</span> Key <span class="p">|</span> Default <span class="p">|</span> Extra          <span class="p">|</span>
++-------------------+-------------+------+-----+---------+----------------+
+<span class="p">|</span> order_id          <span class="p">|</span> int<span class="o">(</span><span class="m">11</span><span class="o">)</span>     <span class="p">|</span> NO   <span class="p">|</span> PRI <span class="p">|</span> NULL    <span class="p">|</span> auto_increment <span class="p">|</span>
+<span class="p">|</span> order_date        <span class="p">|</span> datetime    <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
+<span class="p">|</span> order_customer_id <span class="p">|</span> int<span class="o">(</span><span class="m">11</span><span class="o">)</span>     <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
+<span class="p">|</span> order_status      <span class="p">|</span> varchar<span class="o">(</span><span class="m">45</span><span class="o">)</span> <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
++-------------------+-------------+------+-----+---------+----------------+
 
-<span class="n">mysql</span><span class="o">&gt;</span> <span class="n">describe</span> <span class="n">order_items</span><span class="p">;</span>
-<span class="o">+--------------------------+------------+------+-----+---------+----------------+</span>
-<span class="o">|</span> <span class="n">Field</span>                    <span class="o">|</span> <span class="n">Type</span>       <span class="o">|</span> <span class="n">Null</span> <span class="o">|</span> <span class="n">Key</span> <span class="o">|</span> <span class="n">Default</span> <span class="o">|</span> <span class="n">Extra</span>          <span class="o">|</span>
-<span class="o">+--------------------------+------------+------+-----+---------+----------------+</span>
-<span class="o">|</span> <span class="n">order_item_id</span>            <span class="o">|</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>    <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span> <span class="n">PRI</span> <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span> <span class="n">auto_increment</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">order_item_order_id</span>      <span class="o">|</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>    <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">order_item_product_id</span>    <span class="o">|</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>    <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">order_item_quantity</span>      <span class="o">|</span> <span class="n">tinyint</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">order_item_subtotal</span>      <span class="o">|</span> <span class="nb">float</span>      <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">order_item_product_price</span> <span class="o">|</span> <span class="nb">float</span>      <span class="o">|</span> <span class="n">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="n">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">+--------------------------+------------+------+-----+---------+----------------+</span>
+mysql&gt; describe order_items<span class="p">;</span>
++--------------------------+------------+------+-----+---------+----------------+
+<span class="p">|</span> Field                    <span class="p">|</span> Type       <span class="p">|</span> Null <span class="p">|</span> Key <span class="p">|</span> Default <span class="p">|</span> Extra          <span class="p">|</span>
++--------------------------+------------+------+-----+---------+----------------+
+<span class="p">|</span> order_item_id            <span class="p">|</span> int<span class="o">(</span><span class="m">11</span><span class="o">)</span>    <span class="p">|</span> NO   <span class="p">|</span> PRI <span class="p">|</span> NULL    <span class="p">|</span> auto_increment <span class="p">|</span>
+<span class="p">|</span> order_item_order_id      <span class="p">|</span> int<span class="o">(</span><span class="m">11</span><span class="o">)</span>    <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
+<span class="p">|</span> order_item_product_id    <span class="p">|</span> int<span class="o">(</span><span class="m">11</span><span class="o">)</span>    <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
+<span class="p">|</span> order_item_quantity      <span class="p">|</span> tinyint<span class="o">(</span><span class="m">4</span><span class="o">)</span> <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
+<span class="p">|</span> order_item_subtotal      <span class="p">|</span> float      <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
+<span class="p">|</span> order_item_product_price <span class="p">|</span> float      <span class="p">|</span> NO   <span class="p">|</span>     <span class="p">|</span> NULL    <span class="p">|</span>                <span class="p">|</span>
++--------------------------+------------+------+-----+---------+----------------+
 </pre></div>
 </div>
-<p><a class="reference external" href="#Table-of-contents">Back to Top</a></p>
+<p><a class="reference external" href="##Table-of-contents">Back to Top</a></p>
 </div>
 <div class="section" id="creating-the-spark-session">
 <h2>2. Creating the Spark Session:<a class="headerlink" href="#creating-the-spark-session" title="Permalink to this headline">¶</a></h2>
@@ -632,46 +637,21 @@ Picture Source: https://www.cloudera.com/developers/get-started-with-hadoop-tuto
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spark</span>
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;div&gt;
-    &lt;p&gt;&lt;b&gt;SparkSession - in-memory&lt;/b&gt;&lt;/p&gt;
-</pre></div>
-</div>
-<div>
-    <p><b>SparkContext</b></p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;p&gt;&lt;a href=&quot;http://ip-172-30-2-158.ec2.internal:4040&quot;&gt;Spark UI&lt;/a&gt;&lt;/p&gt;
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;&lt;</span><span class="nt">b</span><span class="p">&gt;</span>SparkContext<span class="p">&lt;/</span><span class="nt">b</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;&lt;</span><span class="nt">b</span><span class="p">&gt;</span>SparkSession - in-memory<span class="p">&lt;/</span><span class="nt">b</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;http://ip-172-30-2-158.ec2.internal:4040&quot;</span><span class="p">&gt;</span>Spark UI<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
 
-&lt;dl&gt;
-  &lt;dt&gt;Version&lt;/dt&gt;
-    &lt;dd&gt;&lt;code&gt;v2.4.0&lt;/code&gt;&lt;/dd&gt;
-  &lt;dt&gt;Master&lt;/dt&gt;
-    &lt;dd&gt;&lt;code&gt;local[*]&lt;/code&gt;&lt;/dd&gt;
-  &lt;dt&gt;AppName&lt;/dt&gt;
-    &lt;dd&gt;&lt;code&gt;retail-database-analysis-python&lt;/code&gt;&lt;/dd&gt;
-&lt;/dl&gt;
+    <span class="p">&lt;</span><span class="nt">dl</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">dt</span><span class="p">&gt;</span>Version<span class="p">&lt;/</span><span class="nt">dt</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">dd</span><span class="p">&gt;&lt;</span><span class="nt">code</span><span class="p">&gt;</span>v2.4.0<span class="p">&lt;/</span><span class="nt">code</span><span class="p">&gt;&lt;/</span><span class="nt">dd</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">dt</span><span class="p">&gt;</span>Master<span class="p">&lt;/</span><span class="nt">dt</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">dd</span><span class="p">&gt;&lt;</span><span class="nt">code</span><span class="p">&gt;</span>local[*]<span class="p">&lt;/</span><span class="nt">code</span><span class="p">&gt;&lt;/</span><span class="nt">dd</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">dt</span><span class="p">&gt;</span>AppName<span class="p">&lt;/</span><span class="nt">dt</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">dd</span><span class="p">&gt;&lt;</span><span class="nt">code</span><span class="p">&gt;</span>retail-database-analysis-python<span class="p">&lt;/</span><span class="nt">code</span><span class="p">&gt;&lt;/</span><span class="nt">dd</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">dl</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 </pre></div>
-</div>
-</div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;/div&gt;
-</pre></div>
-</div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">sparkContext</span>
-<span class="n">sc</span>
-</pre></div>
-</div>
-<div>
-    <p><b>SparkContext</b></p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;p&gt;&lt;a href=&quot;http://ip-172-30-2-158.ec2.internal:4040&quot;&gt;Spark UI&lt;/a&gt;&lt;/p&gt;
-
-&lt;dl&gt;
-  &lt;dt&gt;Version&lt;/dt&gt;
-    &lt;dd&gt;&lt;code&gt;v2.4.0&lt;/code&gt;&lt;/dd&gt;
-  &lt;dt&gt;Master&lt;/dt&gt;
-    &lt;dd&gt;&lt;code&gt;local[*]&lt;/code&gt;&lt;/dd&gt;
-  &lt;dt&gt;AppName&lt;/dt&gt;
-    &lt;dd&gt;&lt;code&gt;retail-database-analysis-python&lt;/code&gt;&lt;/dd&gt;
-&lt;/dl&gt;
-</pre></div>
-</div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sqlContext</span> <span class="o">=</span> <span class="n">SQLContext</span><span class="p">(</span><span class="n">spark</span><span class="o">.</span><span class="n">sparkContext</span><span class="p">)</span>
 <span class="n">sqlContext</span>
@@ -761,44 +741,6 @@ Picture Source: https://www.cloudera.com/developers/get-started-with-hadoop-tuto
 <span class="n">order_items_df</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DataFrame[customer_id: int, customer_fname: string, customer_lname: string, customer_email: string, customer_password: string, customer_street: string, customer_city: string, customer_state: string, customer_zipcode: string]
-
-
-
-
-
-
-DataFrame[department_id: int, department_name: string]
-
-
-
-
-
-
-DataFrame[category_id: int, category_department_id: int, category_name: string]
-
-
-
-
-
-
-DataFrame[product_id: int, product_category_id: int, product_name: string, product_description: string, product_price: float, product_image: string]
-
-
-
-
-
-
-DataFrame[order_id: int, order_date: string, order_customer_id: int, order_status: string]
-
-
-
-
-
-
-DataFrame[order_item_id: int, order_item_order_id: int, order_item_product_id: int, order_item_quantity: int, order_item_subtotal: float, order_item_product_price: float]
-</pre></div>
-</div>
 <p><a class="reference external" href="#Table-of-contents">Back to Top</a></p>
 <div class="section" id="register-all-the-dataframes-as-temporary-views">
 <h3>3.1. Register all the DataFrames as Temporary Views:<a class="headerlink" href="#register-all-the-dataframes-as-temporary-views" title="Permalink to this headline">¶</a></h3>
@@ -821,6 +763,7 @@ DataFrame[order_item_id: int, order_item_order_id: int, order_item_product_id: i
 only showing top 5 rows
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">departments_df</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;departments&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -839,6 +782,7 @@ only showing top 5 rows
 only showing top 5 rows
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">categories_df</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;categories&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -857,6 +801,7 @@ only showing top 5 rows
 only showing top 5 rows
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">products_df</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;products&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -875,6 +820,7 @@ only showing top 5 rows
 only showing top 5 rows
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">orders_df</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;orders&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -893,6 +839,7 @@ only showing top 5 rows
 only showing top 5 rows
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">order_items_df</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;order_items&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -911,6 +858,7 @@ only showing top 5 rows
 only showing top 5 rows
 </pre></div>
 </div>
+<p>​</p>
 <p><a class="reference external" href="#Table-of-contents">Back to Top</a></p>
 </div>
 </div>
@@ -937,6 +885,7 @@ only showing top 5 rows
 +---------------+
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>DF API:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">orders_df</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </pre></div>
@@ -965,6 +914,7 @@ only showing top 5 rows
 +-----------------+
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>DF API:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># how best to join two DataFrames without having a duplicated colum? Mention them as expression</span>
 <span class="p">(</span><span class="n">orders_df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">order_items_df</span><span class="p">,</span> <span class="n">orders_df</span><span class="o">.</span><span class="n">order_id</span> <span class="o">==</span> <span class="n">order_items_df</span><span class="o">.</span><span class="n">order_item_order_id</span><span class="p">)</span>
@@ -980,6 +930,7 @@ only showing top 5 rows
 +-----------------+
 </pre></div>
 </div>
+<p>​</p>
 </div>
 <div class="section" id="get-average-revenue-per-day">
 <h3>4.3 Get Average Revenue Per Day:<a class="headerlink" href="#get-average-revenue-per-day" title="Permalink to this headline">¶</a></h3>
@@ -1022,6 +973,7 @@ only showing top 5 rows
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>DF API:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">avg_rev_per_day</span> <span class="o">=</span> <span class="p">(</span><span class="n">orders_df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">order_items_df</span><span class="p">,</span> <span class="n">orders_df</span><span class="o">.</span><span class="n">order_id</span> <span class="o">==</span> <span class="n">order_items_df</span><span class="o">.</span><span class="n">order_item_order_id</span><span class="p">)</span>
      <span class="o">.</span><span class="n">select</span><span class="p">([</span><span class="s1">&#39;order_date&#39;</span><span class="p">,</span> <span class="s1">&#39;order_item_subtotal&#39;</span><span class="p">,</span> <span class="s1">&#39;order_item_order_id&#39;</span><span class="p">])</span>
@@ -1065,6 +1017,7 @@ only showing top 20 rows
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 </div>
 <div class="section" id="get-average-revenue-per-month">
 <h3>4.3.1 Get Average Revenue Per Month:<a class="headerlink" href="#get-average-revenue-per-month" title="Permalink to this headline">¶</a></h3>
@@ -1102,6 +1055,7 @@ only showing top 20 rows
 +-----+-----------------+
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">avg_rev_per_month</span><span class="o">.</span><span class="n">toPandas</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Average Revenue Per Month&#39;</span><span class="p">);</span>
 </pre></div>
 </div>
@@ -1152,6 +1106,7 @@ DataFrame[order_date: string, avg_rev_per_day: double]
 +----------+-----------+------------------+
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>DF API:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tot_rev_per_month_per_year</span> <span class="o">=</span> <span class="p">(</span><span class="n">orders_df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">order_items_df</span><span class="p">,</span> <span class="n">orders_df</span><span class="o">.</span><span class="n">order_id</span> <span class="o">==</span> <span class="n">order_items_df</span><span class="o">.</span><span class="n">order_item_order_id</span><span class="p">)</span>
      <span class="o">.</span><span class="n">select</span><span class="p">([</span><span class="n">F</span><span class="o">.</span><span class="n">year</span><span class="p">(</span><span class="s1">&#39;order_date&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;order_year&#39;</span><span class="p">),</span> <span class="n">F</span><span class="o">.</span><span class="n">month</span><span class="p">(</span><span class="s1">&#39;order_date&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;order_month&#39;</span><span class="p">),</span> <span class="s1">&#39;order_item_subtotal&#39;</span><span class="p">])</span>
@@ -1187,6 +1142,7 @@ DataFrame[order_date: string, avg_rev_per_day: double]
 +----------+-----------+------------------+
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pdf</span> <span class="o">=</span> <span class="n">tot_rev_per_month_per_year</span><span class="o">.</span><span class="n">toPandas</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1235,6 +1191,7 @@ DataFrame[order_date: string, avg_rev_per_day: double]
 +----------+-----------+-----------+
 </pre></div>
 </div>
+<p>​</p>
 <p>Simple enough, but what if we also want to include the total revenue irrespective of the <code class="docutils literal notranslate"><span class="pre">order_month</span></code> and the <code class="docutils literal notranslate"><span class="pre">order_year</span></code> in the same result? With a conventional group-by statement, this would be impossible. But it’s simple with <code class="docutils literal notranslate"><span class="pre">grouping</span> <span class="pre">sets</span></code>: we simply specify that we would like to aggregate at that level, as well in our grouping set. This is, effectively, the union of several different groupings together.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="n">strip_margin</span><span class="p">(</span>
         <span class="sd">&quot;&quot;&quot;SELECT YEAR(o.order_date) as order_year, MONTH(o.order_date) as order_month, CAST(SUM(oi.order_item_subtotal) AS DECIMAL(38,2)) as tot_revenue </span>
@@ -1265,6 +1222,7 @@ DataFrame[order_date: string, avg_rev_per_day: double]
 +----------+-----------+-----------+
 </pre></div>
 </div>
+<p>​</p>
 <p>Here, include the following groupings in the same result:</p>
 <ul class="simple">
 <li><p>total revenue irrespective of the <code class="docutils literal notranslate"><span class="pre">order_year</span></code> and <code class="docutils literal notranslate"><span class="pre">order_month</span></code></p></li>
@@ -1315,6 +1273,7 @@ DataFrame[order_date: string, avg_rev_per_day: double]
 +----------+-----------+-----------+
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>DF API:</strong>
 The GROUPING SETS operator is only available in SQL. To perform the same in DataFrames, we need to use the <code class="docutils literal notranslate"><span class="pre">rollup</span></code> and <code class="docutils literal notranslate"><span class="pre">cube</span></code> operators - which allow us to get the same results.</p>
 <p>Let’s first get all the sales.</p>
@@ -1357,6 +1316,7 @@ The GROUPING SETS operator is only available in SQL. To perform the same in Data
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pdf</span> <span class="o">=</span> <span class="n">rev_df</span><span class="o">.</span><span class="n">toPandas</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1400,6 +1360,7 @@ A <code class="docutils literal notranslate"><span class="pre">rollup</span></co
 +----------+-----------+-----------+
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>Cube:</strong>
 In <code class="docutils literal notranslate"><span class="pre">rollup</span></code> above we did not get the aggregation</p>
 <ul class="simple">
@@ -1453,6 +1414,7 @@ In <code class="docutils literal notranslate"><span class="pre">rollup</span></c
 +----------+-----------+--------------------+
 </pre></div>
 </div>
+<p>​</p>
 <p><a class="reference external" href="#Table-of-contents">Back to Top</a></p>
 </div>
 <div class="section" id="top-performing-departments">
@@ -1493,6 +1455,7 @@ In <code class="docutils literal notranslate"><span class="pre">rollup</span></c
 +---------------+----------+------------------+
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>DF API:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="p">(</span><span class="n">orders_df</span>
       <span class="o">.</span><span class="n">filter</span><span class="p">((</span><span class="n">orders_df</span><span class="o">.</span><span class="n">order_status</span> <span class="o">!=</span> <span class="s1">&#39;CANCELED&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">orders_df</span><span class="o">.</span><span class="n">order_status</span> <span class="o">!=</span> <span class="s1">&#39;SUSPECTED_FRAUD&#39;</span><span class="p">))</span>
@@ -1531,6 +1494,7 @@ In <code class="docutils literal notranslate"><span class="pre">rollup</span></c
 +---------------+----------+------------------+
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pdf</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">toPandas</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1579,6 +1543,7 @@ Outdoors         4.203180e+05  5.324377e+05
 +----------+-------------------+-------------------+-------------------+-------------+--------------------+
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>SQL Using rank() Window Function:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="n">strip_margin</span><span class="p">(</span>
         <span class="sd">&quot;&quot;&quot;SELECT * </span>
@@ -1597,6 +1562,7 @@ Outdoors         4.203180e+05  5.324377e+05
 +----------+-------------------+-------------------+-------------------+-------------+--------------------+----+
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>DF API:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">products_df</span>
  <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">)</span>
@@ -1611,6 +1577,7 @@ Outdoors         4.203180e+05  5.324377e+05
 +----------+-------------------+-------------------+-------------------+-------------+--------------------+
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>DF API Using Window Function:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">windowSpec</span> <span class="o">=</span> <span class="n">Window</span><span class="o">.</span><span class="n">orderBy</span><span class="p">(</span><span class="n">products_df</span><span class="p">[</span><span class="s1">&#39;product_price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
 </pre></div>
@@ -1625,6 +1592,7 @@ Outdoors         4.203180e+05  5.324377e+05
 +----------+-------------------+-------------------+-------------------+-------------+--------------------+----+
 </pre></div>
 </div>
+<p>​</p>
 <p><a class="reference external" href="#Table-of-contents">Back to Top</a></p>
 </div>
 <div class="section" id="get-highest-revenue-earning-products">
@@ -1648,6 +1616,7 @@ Outdoors         4.203180e+05  5.324377e+05
 +----------+-------------------+--------------------+-------------------+-------------+--------------------+-----------------+
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>SQL:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Top 10 revenue generating products (another way of doing similar thing as above)</span>
 <span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="n">strip_margin</span><span class="p">(</span>
@@ -1681,6 +1650,7 @@ Outdoors         4.203180e+05  5.324377e+05
 +----------+-------------------+---------------------------------------------+---------------+
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>DF API:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Get the sum of revenue of all the products grouped by order_item_product_id from order_items table</span>
 <span class="c1"># 2. Sort the result in descending order of their revenues</span>
@@ -1703,6 +1673,7 @@ Outdoors         4.203180e+05  5.324377e+05
 +----------+-------------------+--------------------+-----------------+
 </pre></div>
 </div>
+<p>​</p>
 <p><a class="reference external" href="#Table-of-contents">Back to Top</a></p>
 </div>
 <div class="section" id="top-5-highest-revenue-earning-products-per-month-per-year">
@@ -1772,6 +1743,7 @@ Outdoors         4.203180e+05  5.324377e+05
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pdf</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">toPandas</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1828,6 +1800,7 @@ only showing top 20 rows
 only showing top 5 rows
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">windowSpec</span> <span class="o">=</span> <span class="n">Window</span><span class="o">.</span><span class="n">partitionBy</span><span class="p">([</span><span class="n">rev_per_month_per_year_per_product</span><span class="o">.</span><span class="n">order_year</span><span class="p">,</span> <span class="n">rev_per_month_per_year_per_product</span><span class="o">.</span><span class="n">order_month</span><span class="p">])</span><span class="o">.</span><span class="n">orderBy</span><span class="p">(</span><span class="n">rev_per_month_per_year_per_product</span><span class="p">[</span><span class="s1">&#39;product_revenue&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
 </pre></div>
 </div>
@@ -1872,6 +1845,7 @@ only showing top 5 rows
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rev_per_month_per_year_per_product</span><span class="o">.</span><span class="n">unpersist</span><span class="p">()</span>
 <span class="n">top_prod_per_month_per_year_by_rev</span><span class="o">.</span><span class="n">unpersist</span><span class="p">()</span>
 </pre></div>
@@ -1918,6 +1892,7 @@ DataFrame[order_year: int, order_month: string, product_name: string, product_re
 +--------------------+-----------+
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>DF API:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pop_cat</span> <span class="o">=</span> <span class="p">(</span><span class="n">order_items_df</span>
  <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">products_df</span><span class="p">,</span> <span class="n">order_items_df</span><span class="o">.</span><span class="n">order_item_product_id</span> <span class="o">==</span> <span class="n">products_df</span><span class="o">.</span><span class="n">product_id</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">)</span>
@@ -1952,6 +1927,7 @@ DataFrame[order_year: int, order_month: string, product_name: string, product_re
 +--------------------+-----------+
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pdf</span> <span class="o">=</span> <span class="n">pop_cat</span><span class="o">.</span><span class="n">toPandas</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -2020,6 +1996,7 @@ Now we calculate total sales per quarter and then pivot on the quarter. <strong>
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rev_cat_qt_pivot_df</span> <span class="o">=</span> <span class="p">(</span><span class="n">rev_cat_qt_df</span>
               <span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s1">&#39;category_name&#39;</span><span class="p">,</span> <span class="s1">&#39;order_year&#39;</span><span class="p">)</span>
               <span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="s1">&#39;order_quarter&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Q1&#39;</span><span class="p">,</span> <span class="s1">&#39;Q2&#39;</span><span class="p">,</span> <span class="s1">&#39;Q3&#39;</span><span class="p">,</span> <span class="s1">&#39;Q4&#39;</span><span class="p">])</span> <span class="c1"># specifying the unique values (if we know) for pivot column makes execution faster</span>
@@ -2063,6 +2040,7 @@ only showing top 20 rows
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>SQL (post Spark 2.4.0)</strong><br />
 <strong>With Spark 2.4.0 SQL equivalent pivot function was introduced</strong>. Now we can achieve the same same with one query instead to DF + SQL combination.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="n">strip_margin</span><span class="p">(</span>
@@ -2111,6 +2089,7 @@ only showing top 20 rows
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>Revalidate above calculation with a specific year=’2013’ and category=’Fishing’:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># filter out item sales for Fishing in 2013</span>
 <span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="n">strip_margin</span><span class="p">(</span>
@@ -2135,6 +2114,7 @@ only showing top 20 rows
 +-------------+----------+-------------+-----------+
 </pre></div>
 </div>
+<p>​</p>
 <p>There are only two quarters Q3 and Q4 for Fishing in 2013 and the sum of the sales is 1248337.61 + 1705514.77 = 2953852.38</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># filter out pivot data for Fishing in 2013</span>
 <span class="n">rev_cat_qt_pivot_df</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;order_year&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2013</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;category_name&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;Fishing&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -2147,6 +2127,7 @@ only showing top 20 rows
 +-------------+----------+----+----+----------+----------+-----------+
 </pre></div>
 </div>
+<p>​</p>
 <p>From the pivot table we can verify that Q1 and Q2 had no sale and the sum of total sales in quarters Q3 and Q4 for Fishing in 2013 2953852.38 Hence, we can verify that our pivot function is working fine.</p>
 <p><strong>Visualise the quarter wise sales for 2013 and 2014 across various categories in different quarters:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rev_cat_qt_pivot_pdf</span> <span class="o">=</span> <span class="n">rev_cat_qt_pivot_df</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;order_year&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2013</span><span class="p">)</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span><span class="o">.</span><span class="n">toPandas</span><span class="p">()</span>
@@ -2289,6 +2270,7 @@ DataFrame[category_name: string, order_year: int, Q1: double, Q2: double, Q3: do
 +---------------+-----+
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>DF API:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">orders_df</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="n">orders_df</span><span class="o">.</span><span class="n">order_status</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">withColumnRenamed</span><span class="p">(</span><span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="s1">&#39;total&#39;</span><span class="p">)</span>
 <span class="n">df</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>
@@ -2315,6 +2297,7 @@ DataFrame[category_name: string, order_year: int, Q1: double, Q2: double, Q3: do
 +---------------+-----+
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pdf</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">toPandas</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -2368,6 +2351,7 @@ DataFrame[category_name: string, order_year: int, Q1: double, Q2: double, Q3: do
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>DF API:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">orders_df</span>
  <span class="o">.</span><span class="n">groupBy</span><span class="p">([</span><span class="n">orders_df</span><span class="o">.</span><span class="n">order_date</span><span class="p">,</span> <span class="n">orders_df</span><span class="o">.</span><span class="n">order_status</span><span class="p">])</span>
@@ -2402,6 +2386,7 @@ only showing top 20 rows
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <p><a class="reference external" href="#Table-of-contents">Back to Top</a></p>
 </div>
 <div class="section" id="get-all-canceled-orders-with-amount-greater-than-1000">
@@ -2446,6 +2431,7 @@ only showing top 20 rows
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>DF API:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cancelled_orders</span> <span class="o">=</span> <span class="p">(</span><span class="n">orders_df</span>
                  <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;order_status&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;CANCELED&#39;</span><span class="p">)</span>
@@ -2491,6 +2477,7 @@ only showing top 20 rows
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">cancelled_orders</span><span class="o">.</span><span class="n">toPandas</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;order_total&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;CANCELED orders with amount greater than $1000&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Amount&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Count&#39;</span><span class="p">);</span>
 </pre></div>
@@ -2541,6 +2528,7 @@ only showing top 20 rows
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>DF API:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">products_df</span>
  <span class="o">.</span><span class="n">select</span><span class="p">([</span><span class="s1">&#39;product_id&#39;</span><span class="p">,</span> <span class="s1">&#39;product_category_id&#39;</span><span class="p">,</span> <span class="s1">&#39;product_name&#39;</span><span class="p">,</span> <span class="s1">&#39;product_price&#39;</span><span class="p">])</span>
@@ -2575,6 +2563,7 @@ only showing top 20 rows
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <p><a class="reference external" href="#Table-of-contents">Back to Top</a></p>
 </div>
 <div class="section" id="sort-products-by-price-within-each-category">
@@ -2615,6 +2604,7 @@ only showing top 20 rows
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>DF API:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">products_df</span>
  <span class="o">.</span><span class="n">repartition</span><span class="p">(</span><span class="s1">&#39;product_category_id&#39;</span><span class="p">)</span>
@@ -2651,6 +2641,7 @@ only showing top 20 rows
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <p><a class="reference external" href="#Table-of-contents">Back to Top</a></p>
 </div>
 <div class="section" id="get-the-topmost-5-products-overall-sorted-by-price-highest-to-lowest">
@@ -2676,6 +2667,7 @@ only showing top 20 rows
 +----------+-------------------+------------------------------------------------+-------------+
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>DF API:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">products_df</span>
     <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;product_id&#39;</span><span class="p">,</span> <span class="s1">&#39;product_category_id&#39;</span><span class="p">,</span> <span class="s1">&#39;product_name&#39;</span><span class="p">,</span> <span class="s1">&#39;product_price&#39;</span><span class="p">)</span>
@@ -2695,6 +2687,7 @@ only showing top 20 rows
 +----------+-------------------+------------------------------------------------+-------------+
 </pre></div>
 </div>
+<p>​</p>
 <p><a class="reference external" href="#Table-of-contents">Back to Top</a></p>
 </div>
 <div class="section" id="get-the-topmost-5-products-in-each-category-where-the-products-are-sorted-by-price-highest-to-lowest">
@@ -2739,6 +2732,7 @@ only showing top 20 rows
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>DF API:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">windowSpec</span> <span class="o">=</span> <span class="n">Window</span><span class="o">.</span><span class="n">partitionBy</span><span class="p">(</span><span class="n">products_df</span><span class="p">[</span><span class="s1">&#39;product_category_id&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">orderBy</span><span class="p">(</span><span class="n">products_df</span><span class="p">[</span><span class="s1">&#39;product_price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
 </pre></div>
@@ -2777,6 +2771,7 @@ only showing top 20 rows
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <p><a class="reference external" href="#Table-of-contents">Back to Top</a></p>
 </div>
 <div class="section" id="rank-and-dense-rank">
@@ -2827,6 +2822,7 @@ only showing top 20 rows
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>DF API:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">windowSpec</span> <span class="o">=</span> <span class="n">Window</span><span class="o">.</span><span class="n">partitionBy</span><span class="p">(</span><span class="n">products_df</span><span class="p">[</span><span class="s1">&#39;product_category_id&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">orderBy</span><span class="p">(</span><span class="n">products_df</span><span class="p">[</span><span class="s1">&#39;product_price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
 </pre></div>
@@ -2872,6 +2868,7 @@ only showing top 20 rows
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#pdf = (top_five_per_ctg</span>
 <span class="c1">#       .select(&#39;product_category_id&#39;).limit(25).distinct()</span>
 <span class="c1">#       .join(top_five_per_ctg, on=&#39;product_category_id&#39;, how=&#39;inner&#39;)</span>
@@ -2938,6 +2935,7 @@ only showing top 20 rows
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>DF API:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">windowSpec</span> <span class="o">=</span> <span class="n">Window</span><span class="o">.</span><span class="n">partitionBy</span><span class="p">(</span><span class="n">products_df</span><span class="p">[</span><span class="s1">&#39;product_category_id&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">orderBy</span><span class="p">(</span><span class="n">products_df</span><span class="p">[</span><span class="s1">&#39;product_price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
 </pre></div>
@@ -2976,6 +2974,7 @@ only showing top 20 rows
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <p><a class="reference external" href="#Table-of-contents">Back to Top</a></p>
 </div>
 <div class="section" id="get-the-customer-id-with-max-revenue-on-daily-basis">
@@ -3030,6 +3029,7 @@ only showing top 20 rows
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>DF API:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rev_per_day_per_cust</span> <span class="o">=</span> <span class="p">(</span><span class="n">orders_df</span>
                          <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;order_date&#39;</span><span class="p">,</span> <span class="s1">&#39;order_id&#39;</span><span class="p">,</span> <span class="s1">&#39;order_customer_id&#39;</span><span class="p">,</span> <span class="s1">&#39;order_status&#39;</span><span class="p">)</span>
@@ -3060,6 +3060,7 @@ only showing top 20 rows
 only showing top 5 rows
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">windowSpec</span> <span class="o">=</span> <span class="n">Window</span><span class="o">.</span><span class="n">partitionBy</span><span class="p">(</span><span class="n">rev_per_day_per_cust</span><span class="p">[</span><span class="s1">&#39;order_date&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">orderBy</span><span class="p">(</span><span class="n">rev_per_day_per_cust</span><span class="p">[</span><span class="s1">&#39;order_total&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
 </pre></div>
 </div>
@@ -3089,6 +3090,7 @@ only showing top 5 rows
 only showing top 5 rows
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">top_cust_per_day_by_rev</span>
  <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">customers_df</span><span class="p">,</span> <span class="n">top_cust_per_day_by_rev</span><span class="o">.</span><span class="n">order_customer_id</span> <span class="o">==</span> <span class="n">customers_df</span><span class="o">.</span><span class="n">customer_id</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">)</span>
  <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;order_date&#39;</span><span class="p">,</span> <span class="s1">&#39;order_customer_id&#39;</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">concat_ws</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;customer_fname&#39;</span><span class="p">,</span> <span class="s1">&#39;customer_lname&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;customer_name&#39;</span><span class="p">),</span> <span class="s1">&#39;order_total&#39;</span><span class="p">)</span>
@@ -3122,6 +3124,7 @@ only showing top 5 rows
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rev_per_day_per_cust</span><span class="o">.</span><span class="n">unpersist</span><span class="p">()</span>
 <span class="n">top_cust_per_day_by_rev</span><span class="o">.</span><span class="n">unpersist</span><span class="p">()</span>
 </pre></div>
@@ -3207,6 +3210,7 @@ DataFrame[order_date: string, order_customer_id: int, order_total: double, rank:
 +-----------+-----------------+-----------+----------+
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">unpersist</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -3251,6 +3255,7 @@ DataFrame[order_date: string, order_customer_id: int, order_total: double, rank:
 only showing top 5 rows
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">windowSpec</span> <span class="o">=</span> <span class="n">Window</span><span class="o">.</span><span class="n">partitionBy</span><span class="p">(</span><span class="n">rev_per_month_per_cust</span><span class="p">[</span><span class="s1">&#39;order_month&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">orderBy</span><span class="p">(</span><span class="n">rev_per_month_per_cust</span><span class="p">[</span><span class="s1">&#39;order_total&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
 </pre></div>
 </div>
@@ -3280,6 +3285,7 @@ only showing top 5 rows
 only showing top 5 rows
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">top_cust_per_month_by_rev</span>
  <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">customers_df</span><span class="p">,</span> <span class="n">top_cust_per_month_by_rev</span><span class="o">.</span><span class="n">order_customer_id</span> <span class="o">==</span> <span class="n">customers_df</span><span class="o">.</span><span class="n">customer_id</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">)</span>
  <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;order_month&#39;</span><span class="p">,</span> <span class="s1">&#39;order_customer_id&#39;</span><span class="p">,</span> 
@@ -3312,6 +3318,7 @@ only showing top 5 rows
 +-----------+-----------------+-----------------+-----------+----------+
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rev_per_month_per_cust</span><span class="o">.</span><span class="n">unpersist</span><span class="p">()</span>
 <span class="n">top_cust_per_month_by_rev</span><span class="o">.</span><span class="n">unpersist</span><span class="p">()</span>
 </pre></div>
@@ -3360,6 +3367,7 @@ DataFrame[order_month: string, order_customer_id: int, order_total: double, dens
 only showing top 10 rows
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>Corner Case:</strong></p>
 <p>Let’s check an order where the same item is ordered twice in a single order. Here in order_id 148 we have product_id 502 ordered twice albeit with different quantities.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="n">strip_margin</span><span class="p">(</span>
@@ -3379,6 +3387,7 @@ only showing top 10 rows
 +-------------------+---------------------+-------------------+-------------------+
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>SQL:</strong></p>
 <p>Create self join between order_items table and filtered out order_items table where order_total &gt;= 300. Moreover, The sql <em><code class="docutils literal notranslate"><span class="pre">AND</span> <span class="pre">t1.order_item_product_id</span> <span class="pre">&lt;</span> <span class="pre">t2.order_item_product_id</span></code></em> will ensure that pair (a, b) and (b, a) are treated as same and are not reported twice.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="n">strip_margin</span><span class="p">(</span>
@@ -3424,6 +3433,7 @@ only showing top 10 rows
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>DF API:</strong></p>
 <p>Doing the same thing as above but this time using DataFrame APIs instead of SQL.</p>
 <p>Note: the usage of alias method on dataframe itself for self joins.</p>
@@ -3481,6 +3491,7 @@ only showing top 20 rows
 only showing top 20 rows
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">unpersist</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -3514,6 +3525,7 @@ only showing top 20 rows
 only showing top 10 rows
 </pre></div>
 </div>
+<p>​</p>
 <p>Second, let’s see which all customers placed ordes in August 2013:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">            SELECT o.order_customer_id, o.order_id, o.order_date</span>
@@ -3541,6 +3553,7 @@ only showing top 10 rows
 only showing top 10 rows
 </pre></div>
 </div>
+<p>​</p>
 <p>Third, Use <code class="docutils literal notranslate"><span class="pre">LEFT</span> <span class="pre">ANTI</span> <span class="pre">JOIN</span></code> combining both the queries above to find which customers did not place any order in August 2013:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;select distinct order_status from orders&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -3560,6 +3573,7 @@ only showing top 10 rows
 +---------------+
 </pre></div>
 </div>
+<p>​</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">        SELECT customer_id, CONCAT_WS(&#39; &#39;, customer_fname, customer_lname) as customer_name</span>
 <span class="s2">        FROM customers A </span>
@@ -3591,6 +3605,7 @@ only showing top 10 rows
 only showing top 10 rows
 </pre></div>
 </div>
+<p>​</p>
 <p>Fourth, Verify with a customer from our result set that he indeed did not place any order in August 2013:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">            SELECT o.order_customer_id, o.order_id, o.order_date</span>
@@ -3609,6 +3624,7 @@ only showing top 10 rows
 +-----------------+--------+----------+
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>DF API:</strong></p>
 <p>Doing the same thing as above but this time using DataFrame APIs instead of SQL.</p>
 <p>Note: the usage of join expression and join type.</p>
@@ -3640,6 +3656,7 @@ only showing top 10 rows
 only showing top 10 rows
 </pre></div>
 </div>
+<p>​</p>
 <p><a class="reference external" href="#Table-of-contents">Back to Top</a></p>
 </div>
 <div class="section" id="get-all-customers-who-placed-more-than-5-orders-in-august-2013">
@@ -3677,6 +3694,7 @@ only showing top 10 rows
 only showing top 10 rows
 </pre></div>
 </div>
+<p>​</p>
 <p><strong>DF API:</strong></p>
 <p>Note: There is no <code class="docutils literal notranslate"><span class="pre">HAVING</span></code> equivalent in DataFrame APIs. We can use the traditional <code class="docutils literal notranslate"><span class="pre">where</span></code> clause.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">orders_df</span><span class="o">.</span><span class="n">filter</span><span class="p">((</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;order_status&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="s1">&#39;CANCELED&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;order_status&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="s1">&#39;SUSPECTED_FRAUD&#39;</span><span class="p">))</span>
@@ -3707,6 +3725,7 @@ only showing top 10 rows
 only showing top 10 rows
 </pre></div>
 </div>
+<p>​</p>
 <p><a class="reference external" href="#Table-of-contents">Back to Top</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spark</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
 </pre></div>
