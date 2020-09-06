@@ -3202,7 +3202,7 @@ We can combine the predictions of two or more models to create a meta prediction
 
 It's much like cross validation. Take 5-fold stacking as an example. First we split the training data into 5 folds. Next we will do 5 iterations. In each iteration, train every base model on 4 folds and predict on the hold-out fold. **We have to keep the predictions on the testing data as well**. This way, in each iteration every base model will make predictions on 1 fold of the training data and all of the testing data. After 5 iterations we will obtain a matrix of shape `#(samples in training data) X #(base models)`. This matrix is then fed to the stacker (it’s just another model) in the second level. After the stacker is fitted, use the predictions on testing data by base models (**each base model is predicts on the test data, since there are 5 base models we will get 5 predictions on thesame test data, therefore we have to take an average to obtain a matrix of the same shape**) as the input for the stacker and obtain our final predictions.
 
-![stacking](assets/stacking.jpg)
+![stacking](stacking.jpg)
 
 #### 7.1 Manual Stacking
 We can stack the predictions of two or more different models in a pre-defined weighted mechanism to get the final prediction. Instead of relying on the prediction of a single model we average out the predictions from two or more models.
